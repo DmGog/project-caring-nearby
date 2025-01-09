@@ -1,8 +1,15 @@
 import {Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField} from "@mui/material";
 import s from "./login-form.module.scss"
-import InfoIcon from "@/shared/assets/Info.svg"
+import InfoIcon from "@/shared/assets/icons/Info.svg"
 import {Visibility, VisibilityOff} from "@mui/icons-material";
-import {useState,MouseEvent} from "react";
+import {useState} from "react";
+import {useLoginMutation} from "@/features/auth/api";
+import {SubmitHandler, useForm} from "react-hook-form";
+import {useNavigate} from "react-router";
+import {PATH} from "@/app/router";
+import {useAppDispatch} from "@/app";
+import {SignInArgs} from "@/features/auth/api/types";
+import {setError, setMessage} from "@/entities";
 
 type TestData = {
     id: number,
@@ -34,30 +41,59 @@ const testData: TestData[] = [
 
 ]
 
+
 export const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false);
-
+    const [logIn] = useLoginMutation()
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const {register, handleSubmit} = useForm<SignInArgs>(
+        {
+            defaultValues: {
+                login: "",
+                password: ""
+            }
+        }
+    )
     const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const onSubmit: SubmitHandler<SignInArgs> = async data => {
+        try {
+            const res = await logIn({login: data.login, password: data.password});
+            if (res && res.data) {
+                sessionStorage.setItem("auth", JSON.stringify(res.data.auth));
+                sessionStorage.setItem("token", JSON.stringify(res.data.token));
+                dispatch(setMessage({messageSuccess: "Данные успешно загружены"}))
+                navigate(PATH.PROFILE.PROFILE_PAGE_PERSONAL_DATA);
+            } else {
+                dispatch(setError({error: "Попробуйте еще раз"}))
+            }
+        } catch (error) {
+            if (error) {
+                dispatch(setError({error: "Попробуйте еще раз"}))
+            }
+        }
 
-    const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-    };
-
-    const handleMouseUpPassword = (event: MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-    };
+    }
 
     return (
         <div className={s.loginForm}>
             <div className={s.loginWrapper}>
                 <span className={s.titleCard}>Авторизация</span>
                 <span className={s.textEntrance}>Вход</span>
-                <form className={s.form}>
-                    <TextField required label={"Логин"} placeholder={"Введите e-mail"} type={"email"} name={"login"}
+                <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
+                    <TextField label={"Логин"} placeholder={"Введите e-mail"} type={"email"}
+                               {...register("login", {
+                                   required: "Введите корректный email-адрес",
+                                   pattern: {
+                                       value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                                       message: "Введите корректный email-адрес",
+                                   },
+                               })}
                                sx={{mb: "30px"}}/>
                     <FormControl sx={{mb: "40px"}}>
                         <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
                         <OutlinedInput
+                            {...register("password")}
                             required
                             placeholder={"Введите пароль"}
                             id="outlined-adornment-password"
@@ -69,8 +105,6 @@ export const LoginForm = () => {
                                             showPassword ? "hide the password" : "display the password"
                                         }
                                         onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                        onMouseUp={handleMouseUpPassword}
                                         edge="end"
                                     >
                                         {showPassword ? <VisibilityOff/> : <Visibility/>}

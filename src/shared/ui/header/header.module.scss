@@ -27,23 +27,3 @@
   color: rgba(0, 0, 0, 87%);
 }
 
-.btn {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: center;
-
-  width: 122px;
-  height: 42px;
-
-
-  border: 1px solid rgba(0, 0, 0, 87%);
-  border-radius: 4px;
-
-  .titleBtn {
-    font-size: 15px;
-    font-weight: 500;
-    color: rgba(0, 0, 0, 87%);
-    letter-spacing: 0.03em;
-  }
-}

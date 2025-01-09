@@ -1,16 +1,24 @@
 import s from "./app.module.scss"
-import {Footer, Header} from "@/shared";
-import {LoginForm} from "@/features";
+import {Footer, GlobalToast, Header} from "@/shared";
+import {Routing} from "@/app/router";
+import {BrowserRouter} from "react-router";
+import {AuthRedirect} from "@/features";
+
+
 
 function App() {
     return (
-        <div className={s.root}>
-            <Header/>
-            <div className={s.wrapper}>
-                <LoginForm/>
+        <BrowserRouter>
+            <div className={s.root}>
+                <Header/>
+                <AuthRedirect/>
+                <div className={s.wrapper}>
+                    <Routing/>
+                </div>
+                <Footer/>
+                <GlobalToast/>
             </div>
-            <Footer/>
-        </div>
+        </BrowserRouter>
     );
 }
 

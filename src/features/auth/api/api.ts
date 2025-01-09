@@ -1,9 +1,10 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {SignInArgs, SignInResponse} from "@/features/auth/api/types";
 
+
 export const signInApi = createApi({
     baseQuery: fetchBaseQuery({
-        baseUrl: "https://natticharity.eveloth.ru/",
+        baseUrl: "https://natticharity.eveloth.ru/"
     }),
 
     endpoints: builder => ({

@@ -1,11 +1,11 @@
-type BaseLocation = {
+export type BaseLocation = {
     latitude: number;
     longitude: number;
     district: string;
     city: string;
 };
 
-type Education = {
+export type Education = {
     organizationName: string;
     level: string;
     specialization: string;
@@ -13,7 +13,7 @@ type Education = {
 };
 
 
-type Contacts = {
+export type Contacts = {
     email: string;
     phone: string;
     social: {

@@ -2,7 +2,7 @@
 export const Favorites = () => {
     return (
         <div>
-            избранное 
+           bdfgdfg
         </div>
     );
 };

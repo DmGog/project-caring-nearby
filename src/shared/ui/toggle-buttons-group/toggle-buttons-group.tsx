@@ -3,7 +3,7 @@ import {ToggleButton, ToggleButtonGroup} from "@mui/material";
 import {GridOnRounded, ListAltRounded, LocationOn} from "@mui/icons-material";
 
 export const ToggleButtonsGroup = () => {
-    const [alignment, setAlignment] = useState<string | null>("grid");
+    const [alignment, setAlignment] = useState<string | null>("left");
 
     const handleAlignment = (
         _: MouseEvent<HTMLElement>,

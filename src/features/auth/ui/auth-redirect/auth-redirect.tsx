@@ -11,7 +11,7 @@ export const AuthRedirect = () => {
         if (!isAuth) {
             navigate(PATH.LOGIN_PAGE);
         } else {
-            navigate(PATH.PROFILE.PROFILE_PAGE_PERSONAL_DATA)
+            navigate(PATH.HELP)
         }
     }, [isAuth]);
 

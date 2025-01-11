@@ -2,19 +2,14 @@ import {Box, Typography} from "@mui/material";
 import {BaseLocation, Education, useUserProfileQuery} from "@/features";
 import {useNavigate} from "react-router";
 import {PATH} from "@/app/router";
-import {formatDate} from "@/shared";
+import {formatDate, InfoRow} from "@/shared";
 
-const InfoRow = ({label, value}: { label: string; value: string | number }) => (
-    <Box display="flex" alignItems="center" gap="4px" mb="4px">
-        <Typography variant="subtitle2">{label}:</Typography>
-        <Typography variant="body2">{value}</Typography>
-    </Box>
-);
 export const PersonalData = () => {
     const {data} = useUserProfileQuery()
     const navigate = useNavigate();
     if (!data) {
-        return navigate(PATH.NOT_FOUND_PAGE)
+        navigate(PATH.NOT_FOUND_PAGE)
+        return null
     }
     return (
         <Box paddingTop="30px">

@@ -63,7 +63,7 @@ export const LoginForm = () => {
                 sessionStorage.setItem("auth", JSON.stringify(res.data.auth));
                 sessionStorage.setItem("token", JSON.stringify(res.data.token));
                 dispatch(setMessage({messageSuccess: "Данные успешно загружены"}))
-                navigate(PATH.PROFILE.PROFILE_PAGE_PERSONAL_DATA);
+                navigate(PATH.HELP);
             } else {
                 dispatch(setError({error: "Попробуйте еще раз"}))
             }

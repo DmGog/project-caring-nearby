@@ -1,18 +1,22 @@
-import {signInApi} from "@/features/auth/api";
 import {configureStore} from "@reduxjs/toolkit";
 import {useDispatch, useSelector} from "react-redux";
 import {appReducer} from "@/entities/app/model/app-slice";
-import {profileApi} from "@/features/my-profile/api/api";
+import {helpRequestsApi} from "@/features/help-request";
+import {profileApi} from "@/features/my-profile";
+import {signInApi} from "@/features/auth";
+
+
 
 export const store = configureStore({
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
-            signInApi.middleware, profileApi.middleware
+            signInApi.middleware, profileApi.middleware, helpRequestsApi.middleware,
         ),
     reducer: {
         app: appReducer,
         [signInApi.reducerPath]: signInApi.reducer,
         [profileApi.reducerPath]: profileApi.reducer,
+        [helpRequestsApi.reducerPath]: helpRequestsApi.reducer,
     },
 })
 

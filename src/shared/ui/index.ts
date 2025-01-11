@@ -5,5 +5,6 @@ export * from "./tabs"
 export * from "./toggle-buttons-group"
 export * from "./info-row"
 export * from "./popover-profile"
+export * from "./search-input"
 
 

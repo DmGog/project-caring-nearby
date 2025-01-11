@@ -10,10 +10,8 @@ export const AuthRedirect = () => {
     useEffect(() => {
         if (!isAuth) {
             navigate(PATH.LOGIN_PAGE);
-        } else {
-            navigate(PATH.HELP)
         }
-    }, [isAuth]);
+    }, [isAuth, navigate]);
 
     return null;
 };

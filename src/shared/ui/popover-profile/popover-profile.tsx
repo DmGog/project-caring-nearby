@@ -1,9 +1,8 @@
-import {FC} from "react";
 import {Box, Button, Popover, Typography} from "@mui/material";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
-type ProfilePopoverProps = {
+type Props = {
     open: boolean;
     anchorEl: null | HTMLElement;
     onClose: () => void;
@@ -11,13 +10,13 @@ type ProfilePopoverProps = {
     onClickExit: () => void;
 }
 
-export const PopoverProfile: FC<ProfilePopoverProps> = ({
-                                                            open,
-                                                            anchorEl,
-                                                            onClose,
-                                                            onClickProfile,
-                                                            onClickExit,
-                                                        }) => {
+export const PopoverProfile = ({
+                                   open,
+                                   anchorEl,
+                                   onClose,
+                                   onClickProfile,
+                                   onClickExit,
+                               }: Props) => {
     return (
         <Popover
             open={open}

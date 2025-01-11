@@ -58,10 +58,10 @@ export const LoginForm = () => {
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const onSubmit: SubmitHandler<SignInArgs> = async data => {
         try {
-            const res = await logIn({login: data.login, password: data.password});
-            if (res && res.data) {
-                sessionStorage.setItem("auth", JSON.stringify(res.data.auth));
-                sessionStorage.setItem("token", JSON.stringify(res.data.token));
+            const res = await logIn({login: data.login, password: data.password}).unwrap();
+            if (res) {
+                sessionStorage.setItem("auth", JSON.stringify(res.auth));
+                sessionStorage.setItem("token", JSON.stringify(res.token));
                 dispatch(setMessage({messageSuccess: "Данные успешно загружены"}))
                 navigate(PATH.HELP);
             } else {

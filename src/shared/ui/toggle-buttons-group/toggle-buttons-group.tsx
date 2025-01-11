@@ -1,15 +1,19 @@
-import {useState, MouseEvent} from "react";
+import {MouseEvent} from "react";
 import {ToggleButton, ToggleButtonGroup} from "@mui/material";
 import {GridOnRounded, ListAltRounded, LocationOn} from "@mui/icons-material";
 
-export const ToggleButtonsGroup = () => {
-    const [alignment, setAlignment] = useState<string | null>("left");
+export type AlignmentType = "left" | "center" | "right"
+type Props = {
+    alignment: AlignmentType
+    onAlignmentChange: (newAlignment: AlignmentType) => void;
+}
 
+export const ToggleButtonsGroup = ({alignment = "left", onAlignmentChange}: Props) => {
     const handleAlignment = (
         _: MouseEvent<HTMLElement>,
-        newAlignment: string | null,
+        newAlignment: AlignmentType,
     ) => {
-        setAlignment(newAlignment);
+        onAlignmentChange(newAlignment);
     };
 
     return (

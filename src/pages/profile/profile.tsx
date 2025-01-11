@@ -24,10 +24,12 @@ export const Profile = () => {
             <Box display={"flex"} gap={"20px"}>
                 <Box>
                     <CardMedia component={"img"} src={ProfileDefaultImage} alt={"profile image"} sx={{
-                        width: "321px",
+                        width: "320px",
                         height: "240px",
                         objectFit: "cover",
                         borderRadius: "4px 4px 0 0",
+                        backgroundColor:"#fff",
+                        border: "1px solid rgba(0, 0, 0, 0.12)",
                     }}/>
                     <CardContent sx={{
                         display: "flex",

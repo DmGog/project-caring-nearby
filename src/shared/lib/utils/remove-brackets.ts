@@ -1,3 +1,3 @@
 export const removeBrackets = (str: string) => {
-    return str.replace(/\[\d+\]\s*/, "").trim();
+    return str.replace(/\[\d+]\s*/, "").trim();
 }

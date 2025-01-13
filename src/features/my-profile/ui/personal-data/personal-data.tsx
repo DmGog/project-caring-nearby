@@ -1,14 +1,10 @@
 import {Box, Typography} from "@mui/material";
 import {BaseLocation, Education, useUserProfileQuery} from "@/features";
-import {useNavigate} from "react-router";
-import {PATH} from "@/app/router";
 import {formatDate, InfoRow} from "@/shared";
 
 export const PersonalData = () => {
     const {data} = useUserProfileQuery()
-    const navigate = useNavigate();
     if (!data) {
-        navigate(PATH.NOT_FOUND_PAGE)
         return null
     }
     return (

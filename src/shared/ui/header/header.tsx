@@ -44,7 +44,7 @@ export const Header = () => {
                 maxWidth: "1548px",
                 justifyContent: "space-between"
             }}>
-                <Link to={PATH.PROFILE.PROFILE_PAGE_PERSONAL_DATA}>
+                <Link to={PATH.HELP}>
                     <LogoIcon/>
                 </Link>
                 <Box display="flex" width="100%" maxWidth="824px" alignItems="center" justifyContent="space-between">

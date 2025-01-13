@@ -1,15 +1,13 @@
 import {Box, Pagination, Paper, Typography} from "@mui/material";
-import {CardsRequest, FilterController} from "@/widgets";
-import {useHelpRequestsQuery} from "@/features";
+import {CardsListItemRequest, CardsRequest, FilterController} from "@/widgets";
+import {CardMap, useHelpRequestsQuery} from "@/features";
 import {AlignmentType, SearchInput, ToggleButtonsGroup} from "@/shared";
 import {useState} from "react";
-import {useNavigate} from "react-router";
-import {PATH} from "@/app/router";
-import {CardsListItemRequest} from "@/widgets/cards-list-item-request/cards-list-item-request";
+import {NotFoundPage} from "@/pages";
+
 
 export const Help = () => {
     const {data} = useHelpRequestsQuery()
-    const navigate = useNavigate()
     const [alignment, setAlignment] = useState<AlignmentType>("left");
 
     const handleAlignmentChange = (newAlignment: AlignmentType) => {
@@ -26,7 +24,6 @@ export const Help = () => {
         setCurrentPage(value);
     };
     if (!data) {
-        navigate(PATH.NOT_FOUND_PAGE)
         return null
     }
     return (
@@ -46,15 +43,27 @@ export const Help = () => {
                         backgroundColor: "#FFFFFF",
                         padding: "12px 36px 40px",
                     }}>
+
                         <Box display="flex" alignItems="center" justifyContent="space-between" width="100%"
                              height="40px" mb="20px">
-                            <Typography variant="h6">Найдено: {data.length}</Typography>
+                            {alignment !== "right" ? <Typography variant="h6">Найдено: {data.length}</Typography> :
+                                <div></div>}
                             <ToggleButtonsGroup alignment={alignment} onAlignmentChange={handleAlignmentChange}/>
                         </Box>
                         <Box display="flex" flexDirection="column" alignItems="center" width="100%">
-                            {alignment === "left" && <CardsRequest data={currentItems}/>}
-                            {alignment === "center" && <CardsListItemRequest data={currentItems}/>}
-                            <Pagination
+                            {(() => {
+                                switch (alignment) {
+                                    case "left":
+                                        return <CardsRequest data={currentItems}/>;
+                                    case "center":
+                                        return <CardsListItemRequest data={currentItems}/>;
+                                    case "right":
+                                        return <CardMap/>;
+                                    default:
+                                        return <NotFoundPage/>
+                                }
+                            })()}
+                            {alignment !== "right" && <Pagination
                                 sx={{
                                     mt: "30px"
                                 }}
@@ -62,7 +71,7 @@ export const Help = () => {
                                 page={currentPage}
                                 onChange={(_, value) => handlePageChange(value)}
                                 color="primary"
-                            />
+                            />}
                         </Box>
                     </Paper>
                 </Box>

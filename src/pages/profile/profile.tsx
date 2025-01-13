@@ -28,7 +28,7 @@ export const Profile = () => {
                         height: "240px",
                         objectFit: "cover",
                         borderRadius: "4px 4px 0 0",
-                        backgroundColor:"#fff",
+                        backgroundColor: "#fff",
                         border: "1px solid rgba(0, 0, 0, 0.12)",
                     }}/>
                     <CardContent sx={{
@@ -70,7 +70,9 @@ export const Profile = () => {
                        }}>
                     <Box display={"flex"}>
                         <TabsComponent/>
-                        {pathname === PATH.PROFILE.PROFILE_PAGE_FAVORITES && <ToggleButtonsGroup/>}
+                        {pathname === PATH.PROFILE.PROFILE_PAGE_FAVORITES &&
+                            <ToggleButtonsGroup alignment={"left"} onAlignmentChange={() => {
+                            }}/>}
                     </Box>
                     <Outlet/>
                 </Paper>

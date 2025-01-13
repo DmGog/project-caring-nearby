@@ -1,7 +1,5 @@
 import {Box, List, ListItem, Typography} from "@mui/material";
 import {useUserProfileQuery} from "@/features";
-import {useNavigate} from "react-router";
-import {PATH} from "@/app/router";
 import VkIcon from "@/shared/assets/icons/vk.svg"
 import TelegramIcon from "@/shared/assets/icons/telegram.svg"
 import WhatsappIcon from "@/shared/assets/icons/whatsapp.svg"
@@ -9,9 +7,7 @@ import WhatsappIcon from "@/shared/assets/icons/whatsapp.svg"
 
 export const Contacts = () => {
     const {data} = useUserProfileQuery()
-    const navigate = useNavigate();
     if (!data) {
-        navigate(PATH.NOT_FOUND_PAGE)
         return null
     }
     return (

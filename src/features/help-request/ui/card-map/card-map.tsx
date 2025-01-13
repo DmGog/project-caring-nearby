@@ -1,9 +1,5 @@
-
 export const CardMap = () => {
     return (
-        <div>
-
-        </div>
+        <div>карта яндекс </div>
     );
 };
-

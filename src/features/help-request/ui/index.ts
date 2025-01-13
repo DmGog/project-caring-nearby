@@ -1,3 +1,3 @@
 export * from "./card-map"
-export * from "./card-list-item"
+export * from "./card-list-item-request"
 export * from "./card-request"

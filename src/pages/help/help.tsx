@@ -5,6 +5,7 @@ import {AlignmentType, SearchInput, ToggleButtonsGroup} from "@/shared";
 import {useState} from "react";
 import {useNavigate} from "react-router";
 import {PATH} from "@/app/router";
+import {CardsListItemRequest} from "@/widgets/cards-list-item-request/cards-list-item-request";
 
 export const Help = () => {
     const {data} = useHelpRequestsQuery()
@@ -52,6 +53,7 @@ export const Help = () => {
                         </Box>
                         <Box display="flex" flexDirection="column" alignItems="center" width="100%">
                             {alignment === "left" && <CardsRequest data={currentItems}/>}
+                            {alignment === "center" && <CardsListItemRequest data={currentItems}/>}
                             <Pagination
                                 sx={{
                                     mt: "30px"

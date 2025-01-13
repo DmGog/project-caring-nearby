@@ -59,7 +59,11 @@ export const CardRequest = ({
             width: "320px",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between"
+            justifyContent: "space-between",
+            cursor: "pointer",
+            "&:hover": {
+                boxShadow: 6,
+            },
         }}>
             <Box>
                 <CardMedia component={"img"} src={cardImage} alt={"card image"} sx={{
@@ -69,12 +73,11 @@ export const CardRequest = ({
                 }}/>
 
                 <Box width="100%" display="flex" alignItems="flex-start" padding="16px" minHeight="128px">
-                    <Typography variant={"h5"} sx={{
-                        width: "256px"
-                    }}>
+                    <Typography variant={"h5"}>
                         {removeBrackets(titleCard)}
                     </Typography>
                     <IconButton sx={{
+                        marginLeft: "10px",
                         border: "1px solid rgba(0, 0, 0, 0.12)",
                         borderRadius: "4px",
                     }}><StarBorder/></IconButton>
@@ -103,16 +106,16 @@ export const CardRequest = ({
                     <Typography variant="subtitle2" mb="4px">Завершение</Typography>
                     <Typography variant="body2" mb="20px">{formatDate(dateClose)}</Typography>
                     <Typography variant="subtitle2" mb="4px">Мы собрали</Typography>
-                    <LinearProgress color="primary" variant="determinate"
+                    <LinearProgress variant="determinate"
                                     value={Math.min((requestGoalCurrentValue / requestGoal) * 100, 100)} sx={{
                         mb: "4px"
                     }}/>
                     <Box display="flex" alignItems="center" justifyContent="space-between" width="100%"
                          mb="20px">
-                        <Typography variant="body2">{formatNumber(requestGoalCurrentValue)} руб</Typography>
-                        <Typography variant="body1">{formatNumber(requestGoal)} руб</Typography>
+                        <Typography variant="body2" color="textSecondary">{formatNumber(requestGoalCurrentValue)} руб</Typography>
+                        <Typography variant="body2" color="textSecondary">{formatNumber(requestGoal)} руб</Typography>
                     </Box>
-                    <Typography variant="body2" mb="10px">Нас уже: {formatNumber(contributorsCount)}</Typography>
+                    <Typography variant="body2" mb="10px" color="textSecondary">Нас уже: {formatNumber(contributorsCount)}</Typography>
                     <Button size="large" color="primary" variant="contained" fullWidth>Помочь</Button>
                 </CardContent>
             </Box>

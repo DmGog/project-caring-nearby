@@ -13,7 +13,7 @@ export const profileApi = createApi({
             }
         },
     }),
-    tagTypes: ["UserProfile", "UserFavourites"],
+    tagTypes: ["UserProfile", "HelpRequest"],
     endpoints: (builder) => ({
         userProfile: builder.query<UserType, void>({
             query: () => "api/user",
@@ -22,7 +22,7 @@ export const profileApi = createApi({
         }),
         userHelpRequests: builder.query<string[], void>({
             query: () => "api/user/favourites",
-            providesTags: ["UserFavourites"],
+            providesTags: ["HelpRequest"],
             keepUnusedDataFor: 5,
         }),
         addHelpRequestFavourites: builder.mutation<void, { requestId: string }>({
@@ -35,14 +35,14 @@ export const profileApi = createApi({
                     "Accept": "application/json",
                 },
             }),
-            invalidatesTags: ["UserFavourites"],
+            invalidatesTags: ["HelpRequest"],
         }),
         removeHelpRequestFavourites: builder.mutation<void, { requestId: string }>({
             query: ({requestId}) => ({
                 url: `api/user/favourites/${requestId}`,
                 method: "DELETE",
             }),
-            invalidatesTags: ["UserFavourites"],
+            invalidatesTags: ["HelpRequest"],
         }),
     }),
 });

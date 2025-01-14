@@ -14,7 +14,7 @@ import CardMaterialImage from "@/shared/assets/images/card-material.png";
 import CardOrganizationImage from "@/shared/assets/images/card-organization.png";
 import {Star, StarBorder} from "@mui/icons-material";
 import {formatDate, formatNumber, removeBrackets} from "@/shared";
-import {useHelpRequest} from "@/features/help-request/hooks/use-help-request";
+import {useHelpRequest} from "@/features";
 
 
 type Props = {
@@ -66,6 +66,7 @@ export const CardRequest = ({
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
+            cursor: "pointer",
             "&:hover": {
                 boxShadow: 6,
             },

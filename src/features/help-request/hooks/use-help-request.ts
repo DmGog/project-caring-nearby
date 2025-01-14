@@ -12,8 +12,12 @@ export const useHelpRequest = () => {
 
     const handleAddContribute = async (id: string) => {
         try {
-            await addContribute({id})
-            toast.success("Успех! Спасибо за помощь")
+            const response = await addContribute({id})
+            if (response.error?.originalStatus === 500) {
+                toast.error("Ошибка попробуйте еще раз")
+            } else {
+                toast.success("Успех! Спасибо за помощь")
+            }
         } catch (error) {
             if (error) {
                 toast.error("Ошибка попробуйте еще раз")
@@ -26,22 +30,14 @@ export const useHelpRequest = () => {
                 ? await addFavorite({requestId: id})
                 : await removeFavorite({requestId: id});
 
-            if ("error" in response) {
-                const error = response.error;
-                if (isFetchBaseQueryError(error) && error.status === 500) {
-                    toast.error("Ошибка! Попробуйте еще раз");
-                } else {
-                    toast.success(`Успех! ${action === "add" ? "Добавлено в избранное" : "Удалено из избранного"}`);
-                }
+            if (response.error?.originalStatus === 500) {
+                toast.error("Ошибка! Попробуйте еще раз");
             } else {
                 toast.success(`Успех! ${action === "add" ? "Добавлено в избранное" : "Удалено из избранного"}`);
             }
         } catch (error) {
             if (error) toast.error("Ошибка! Попробуйте еще раз");
         }
-    };
-    const isFetchBaseQueryError = (error: unknown): error is FetchBaseQueryError => {
-        return typeof error === "object" && error !== null && "status" in error;
     };
 
     return {

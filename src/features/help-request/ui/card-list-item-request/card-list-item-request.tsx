@@ -1,7 +1,8 @@
 import {Box, Button, LinearProgress, ListItem, Stack, Typography} from "@mui/material";
 import {formatDate, formatNumber, removeBrackets} from "@/shared";
 import {Star, StarBorder} from "@mui/icons-material";
-import {useHelpRequest} from "@/features/help-request/hooks/use-help-request";
+import {useHelpRequest} from "@/features";
+
 
 type Props = {
     id: string

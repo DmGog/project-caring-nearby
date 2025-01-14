@@ -12,11 +12,13 @@ import {
 import CardFinanceImage from "@/shared/assets/images/card-finance.png";
 import CardMaterialImage from "@/shared/assets/images/card-material.png";
 import CardOrganizationImage from "@/shared/assets/images/card-organization.png";
-import {StarBorder} from "@mui/icons-material";
+import {Star, StarBorder} from "@mui/icons-material";
 import {formatDate, formatNumber, removeBrackets} from "@/shared";
+import {useHelpRequest} from "@/features/help-request/hooks/use-help-request";
 
 
 type Props = {
+    id: string
     titleCard: string
     organization: string
     location: {
@@ -30,6 +32,7 @@ type Props = {
     contributorsCount: number;
     requestGoal: number;
     requestGoalCurrentValue: number;
+    isFavorite: boolean;
 }
 export const CardRequest = ({
                                 requesterType,
@@ -41,8 +44,11 @@ export const CardRequest = ({
                                 dateClose,
                                 contributorsCount,
                                 organization,
-                                location
+                                location,
+                                id, isFavorite
                             }: Props) => {
+
+    const {handleAddFavorite, handleRemoveFavorite, handleAddContribute} = useHelpRequest()
 
     let cardImage;
     if (helpType === "finance" && requesterType === "person") {
@@ -60,7 +66,6 @@ export const CardRequest = ({
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            cursor: "pointer",
             "&:hover": {
                 boxShadow: 6,
             },
@@ -76,11 +81,16 @@ export const CardRequest = ({
                     <Typography variant={"h5"}>
                         {removeBrackets(titleCard)}
                     </Typography>
-                    <IconButton sx={{
-                        marginLeft: "10px",
-                        border: "1px solid rgba(0, 0, 0, 0.12)",
-                        borderRadius: "4px",
-                    }}><StarBorder/></IconButton>
+                    <IconButton
+                        onClick={() => (isFavorite ? handleRemoveFavorite(id) : handleAddFavorite(id))}
+                        sx={{
+                            marginLeft: "10px",
+                            border: "1px solid rgba(0, 0, 0, 0.12)",
+                            borderRadius: "4px",
+                        }}
+                    >
+                        {isFavorite ? <Star/> : <StarBorder/>}
+                    </IconButton>
                 </Box>
             </Box>
             <Box>
@@ -112,11 +122,15 @@ export const CardRequest = ({
                     }}/>
                     <Box display="flex" alignItems="center" justifyContent="space-between" width="100%"
                          mb="20px">
-                        <Typography variant="body2" color="textSecondary">{formatNumber(requestGoalCurrentValue)} руб</Typography>
+                        <Typography variant="body2"
+                                    color="textSecondary">{formatNumber(requestGoalCurrentValue)} руб</Typography>
                         <Typography variant="body2" color="textSecondary">{formatNumber(requestGoal)} руб</Typography>
                     </Box>
-                    <Typography variant="body2" mb="10px" color="textSecondary">Нас уже: {formatNumber(contributorsCount)}</Typography>
-                    <Button size="large" color="primary" variant="contained" fullWidth>Помочь</Button>
+                    <Typography variant="body2" mb="10px" color="textSecondary">Нас
+                        уже: {formatNumber(contributorsCount)}</Typography>
+                    <Button onClick={() => handleAddContribute(id)} size="large" color="primary"
+                            variant="contained"
+                            fullWidth>Помочь</Button>
                 </CardContent>
             </Box>
         </Card>

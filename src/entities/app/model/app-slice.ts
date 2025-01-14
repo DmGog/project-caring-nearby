@@ -1,10 +1,8 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 
 
 export type AppState = {
     isLoading: boolean,
-    messageSuccess: null | string,
-    error: null | string,
 }
 
 export const appSlice = createSlice({
@@ -13,15 +11,8 @@ export const appSlice = createSlice({
         isLoading: false,
         messageSuccess: null,
     } as AppState,
-    reducers: {
-        setMessage(state, action: PayloadAction<{ messageSuccess: string | null }>) {
-            state.messageSuccess = action.payload.messageSuccess;
-        },
-        setError(state, action: PayloadAction<{ error: string | null }>) {
-            state.error = action.payload.error;
-        }
-    }
+    reducers: {}
 })
 
-export const { setMessage,setError} = appSlice.actions
+export const {} = appSlice.actions
 export const appReducer = appSlice.reducer

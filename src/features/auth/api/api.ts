@@ -3,6 +3,7 @@ import {SignInArgs, SignInResponse} from "@/features/auth/api/types";
 
 
 export const signInApi = createApi({
+    reducerPath: "signInApi",
     baseQuery: fetchBaseQuery({
         baseUrl: "https://natticharity.eveloth.ru/"
     }),
@@ -20,7 +21,6 @@ export const signInApi = createApi({
             }),
         }),
     }),
-    reducerPath: "signInApi",
 });
 
 export const {useLoginMutation} = signInApi

@@ -27,7 +27,7 @@ type HelperRequirements = {
     qualification: string;
 };
 
-type HelpRequest = {
+export type HelpRequest = {
     id: string;
     title: string;
     organization: Organization;

@@ -7,9 +7,8 @@ import {useLoginMutation} from "@/features/auth/api";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useNavigate} from "react-router";
 import {PATH} from "@/app/router";
-import {useAppDispatch} from "@/app";
 import {SignInArgs} from "@/features/auth/api/types";
-import {setError, setMessage} from "@/entities";
+import {toast} from "react-toastify";
 
 type TestData = {
     id: number,
@@ -46,7 +45,6 @@ export const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [logIn] = useLoginMutation()
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
     const {register, handleSubmit} = useForm<SignInArgs>(
         {
             defaultValues: {
@@ -62,14 +60,14 @@ export const LoginForm = () => {
             if (res) {
                 sessionStorage.setItem("auth", JSON.stringify(res.auth));
                 sessionStorage.setItem("token", JSON.stringify(res.token));
-                dispatch(setMessage({messageSuccess: "Данные успешно загружены"}))
+                toast.success("Данные успешно загружены")
                 navigate(PATH.HELP);
             } else {
-                dispatch(setError({error: "Попробуйте еще раз"}))
+                toast.error("Ошибка! Попробуйте еще раз")
             }
         } catch (error) {
             if (error) {
-                dispatch(setError({error: "Попробуйте еще раз"}))
+                toast.error("Ошибка! Попробуйте еще раз")
             }
         }
 

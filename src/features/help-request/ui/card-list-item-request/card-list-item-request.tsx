@@ -1,8 +1,10 @@
 import {Box, Button, LinearProgress, ListItem, Stack, Typography} from "@mui/material";
 import {formatDate, formatNumber, removeBrackets} from "@/shared";
-import {StarBorder} from "@mui/icons-material";
+import {Star, StarBorder} from "@mui/icons-material";
+import {useHelpRequest} from "@/features/help-request/hooks/use-help-request";
 
 type Props = {
+    id: string
     titleCard: string
     organization: string
     location: {
@@ -14,6 +16,7 @@ type Props = {
     contributorsCount: number;
     requestGoal: number;
     requestGoalCurrentValue: number;
+    isFavorite: boolean;
 }
 
 export const CardListItemRequest = ({
@@ -24,8 +27,11 @@ export const CardListItemRequest = ({
                                         dateClose,
                                         contributorsCount,
                                         organization,
-                                        location
+                                        location,
+                                        isFavorite,
+                                        id
                                     }: Props) => {
+    const {handleRemoveFavorite, handleAddFavorite, handleAddContribute} = useHelpRequest()
     return (
         <ListItem sx={{
             width: "1008px",
@@ -60,7 +66,7 @@ export const CardListItemRequest = ({
                         </Box>
                         <Typography variant="body2" mb="10px" color="textSecondary">Нас
                             уже: {formatNumber(contributorsCount)}</Typography>
-                        <Button variant="contained" fullWidth>Помочь</Button>
+                        <Button onClick={() => handleAddContribute(id)} variant="contained" fullWidth>Помочь</Button>
                     </Box>
                 </Stack>
 
@@ -104,13 +110,16 @@ export const CardListItemRequest = ({
                         </Typography>
                     </Box>
                 </Stack>
-                <Button size="small" color="inherit" variant="outlined" startIcon={<StarBorder/>} sx={{
-                    height: "28px",
-                    textTransform: "none",
-                    border: "1px solid rgba(0, 0, 0, 0.12)",
-                    padding: "4px 10px",
-                }}>
-                    В избранное
+                <Button onClick={() => (isFavorite ? handleRemoveFavorite(id) : handleAddFavorite(id))} size="small"
+                        color="inherit"
+                        variant="outlined" startIcon={isFavorite ? <Star/> : <StarBorder/>}
+                        sx={{
+                            height: "28px",
+                            textTransform: "none",
+                            border: "1px solid rgba(0, 0, 0, 0.12)",
+                            padding: "4px 10px",
+                        }}>
+                    {isFavorite ? "Удалить из избранное" : "Добавить в избранное"}
                 </Button>
             </Stack>
         </ListItem>

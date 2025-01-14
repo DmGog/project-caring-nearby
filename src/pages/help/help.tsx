@@ -1,15 +1,14 @@
 import {Box, Pagination, Paper, Typography} from "@mui/material";
 import {CardsListItemRequest, CardsRequest, FilterController} from "@/widgets";
-import {CardMap, useHelpRequestsQuery} from "@/features";
+import {CardMap, useHelpRequestsQuery, useUserHelpRequestsQuery} from "@/features";
 import {AlignmentType, SearchInput, ToggleButtonsGroup} from "@/shared";
 import {useState} from "react";
-import {NotFoundPage} from "@/pages";
 
 
 export const Help = () => {
     const {data} = useHelpRequestsQuery()
+    const {data: favoritesHelps} = useUserHelpRequestsQuery();
     const [alignment, setAlignment] = useState<AlignmentType>("left");
-
     const handleAlignmentChange = (newAlignment: AlignmentType) => {
         setAlignment(newAlignment);
     };
@@ -24,6 +23,9 @@ export const Help = () => {
         setCurrentPage(value);
     };
     if (!data) {
+        return null
+    }
+    if (!favoritesHelps) {
         return null
     }
     return (
@@ -54,13 +56,14 @@ export const Help = () => {
                             {(() => {
                                 switch (alignment) {
                                     case "left":
-                                        return <CardsRequest data={currentItems}/>;
+                                        return <CardsRequest data={currentItems} favoriteHelps={favoritesHelps}/>;
                                     case "center":
-                                        return <CardsListItemRequest data={currentItems}/>;
+                                        return <CardsListItemRequest data={currentItems}
+                                                                     favoriteHelps={favoritesHelps}/>;
                                     case "right":
                                         return <CardMap/>;
                                     default:
-                                        return <NotFoundPage/>
+                                        return null;
                                 }
                             })()}
                             {alignment !== "right" && <Pagination

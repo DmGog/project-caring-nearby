@@ -1,16 +1,16 @@
 import s from "./profile.module.scss"
 import ProfileDefaultImage from "@/shared/assets/images/profile-default.png"
-import {Outlet, useLocation, useNavigate} from "react-router";
+import {Outlet, useNavigate} from "react-router";
 import {useUserProfileQuery} from "@/features";
 import {Box, Button, CardContent, CardMedia, Paper, Typography} from "@mui/material";
 import {PATH} from "@/app/router";
-import {TabsComponent, ToggleButtonsGroup} from "@/shared";
+import {TabsComponent} from "@/shared";
 
 
 export const Profile = () => {
     const {data} = useUserProfileQuery()
+    console.log(data)
     const navigate = useNavigate();
-    const {pathname} = useLocation()
     const handleLogOut = () => {
         sessionStorage.clear()
         navigate(PATH.LOGIN_PAGE);
@@ -65,15 +65,11 @@ export const Profile = () => {
                 <Paper variant={"outlined"} elevation={0}
                        sx={{
                            width: "100%",
+                           minHeight: "982px",
                            borderRadius: "4px",
                            padding: "10px 36px 40px",
                        }}>
-                    <Box display={"flex"}>
-                        <TabsComponent/>
-                        {pathname === PATH.PROFILE.PROFILE_PAGE_FAVORITES &&
-                            <ToggleButtonsGroup alignment={"left"} onAlignmentChange={() => {
-                            }}/>}
-                    </Box>
+                    <TabsComponent/>
                     <Outlet/>
                 </Paper>
             </Box>

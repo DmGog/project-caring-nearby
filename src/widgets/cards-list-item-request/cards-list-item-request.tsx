@@ -3,12 +3,14 @@ import {CardListItemRequest, HelpRequests} from "@/features";
 
 type Props = {
     data: HelpRequests
+    favoriteHelps: string[]
 }
-export const CardsListItemRequest = ({data}: Props) => {
+export const CardsListItemRequest = ({data, favoriteHelps}: Props) => {
     return (
         <List>
             {data.map(c => (
-                <CardListItemRequest key={c.id} requestGoal={c.requestGoal} descriptionHelpRequest={c.description}
+                <CardListItemRequest key={c.id} id={c.id} isFavorite={favoriteHelps.includes(c.id)}
+                                     requestGoal={c.requestGoal} descriptionHelpRequest={c.description}
                                      titleCard={c.title} location={c.location}
                                      contributorsCount={c.contributorsCount}
                                      requestGoalCurrentValue={c.requestGoalCurrentValue} dateClose={c.endingDate}

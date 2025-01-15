@@ -58,10 +58,6 @@ export const Helps = () => {
         setCurrentPage(value);
     };
 
-    if (!data) {
-        return <NotFoundResult img="infoNotImage" title="Ошибка! Не удалось загрузить запросы" color="red"/>;
-    }
-
     if (!favoritesHelps) {
         return null;
     }
@@ -84,23 +80,29 @@ export const Helps = () => {
                             <Typography variant="h6">Найдено: {filteredData.length}</Typography>
                             <ToggleButtonsGroup alignment={alignment} onAlignmentChange={setAlignment}/>
                         </Box>
-                        <Box display="flex" flexDirection="column" alignItems="center" width="100%">
-                            {filteredData.length < 1 &&
-                                <NotFoundResult img={"resultNotImage"} title={"Запросы не найдены"}/>}
-                            {alignment === "left" && <CardsRequest data={currentItems} favoriteHelps={favoritesHelps}/>}
-                            {alignment === "center" &&
-                                <CardsListItemRequest data={currentItems} favoriteHelps={favoritesHelps}/>}
-                            {alignment === "right" && <CardMap/>}
-                            {alignment !== "right" && (
-                                <Pagination
-                                    sx={{mt: "30px"}}
-                                    count={Math.ceil(filteredData.length / itemsPerPage)}
-                                    page={currentPage}
-                                    onChange={(_, value) => handlePageChange(value)}
-                                    color="primary"
-                                />
-                            )}
-                        </Box>
+                        {!data ?
+                            <NotFoundResult img="infoNotImage"
+                                            title="Ошибка! Не удалось загрузить запросы"
+                                            color="red"/>
+                            :
+                            (<Box display="flex" flexDirection="column" alignItems="center" width="100%">
+                                {filteredData.length < 1 &&
+                                    <NotFoundResult img={"resultNotImage"} title={"Запросы не найдены"}/>}
+                                {alignment === "left" &&
+                                    <CardsRequest data={currentItems} favoriteHelps={favoritesHelps}/>}
+                                {alignment === "center" &&
+                                    <CardsListItemRequest data={currentItems} favoriteHelps={favoritesHelps}/>}
+                                {alignment === "right" && <CardMap/>}
+                                {alignment !== "right" && (
+                                    <Pagination
+                                        sx={{mt: "30px"}}
+                                        count={Math.ceil(filteredData.length / itemsPerPage)}
+                                        page={currentPage}
+                                        onChange={(_, value) => handlePageChange(value)}
+                                        color="primary"
+                                    />
+                                )}
+                            </Box>)}
                     </Paper>
                 </Box>
             </Box>

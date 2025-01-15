@@ -5,6 +5,7 @@ import {AlignmentType, NotFoundResult, SearchInput, ToggleButtonsGroup} from "@/
 import {useState, useEffect} from "react";
 import {useSearchParams} from "react-router-dom";
 import debounce from "lodash.debounce";
+import dayjs, {Dayjs} from "dayjs";
 
 export const Helps = () => {
     const {data} = useHelpRequestsQuery();
@@ -16,11 +17,27 @@ export const Helps = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 3;
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
+    const [filters, setFilters] = useState<string[]>(searchParams.getAll("filter"));
+    const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
 
     useEffect(() => {
-        setFilteredData(data || []);
-    }, [data]);
+        const filtered = (data || []).filter(item => {
+            const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.organization.title.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesFilters = filters.length === 0 || filters.some(filter =>
+                item.requesterType.includes(filter) ||
+                item.helpType.includes(filter) ||
+                item.helperRequirements.qualification.includes(filter) ||
+                item.helperRequirements.helperType.includes(filter) ||
+                (filter === "true" && item.helperRequirements.isOnline) ||
+                (filter === "false" && !item.helperRequirements.isOnline)
+            );
+            const matchesDate = selectedDate ? dayjs(item.endingDate).isSame(selectedDate, "day") : true;
+
+            return matchesSearch && matchesFilters && matchesDate;
+        });
+        setFilteredData(filtered);
+    }, [data, searchTerm, filters, selectedDate]);
 
 
     const handleSearch = debounce((value: string) => {
@@ -43,7 +60,17 @@ export const Helps = () => {
         handleSearch(value);
     };
 
-
+    const handleFilterChange = (selectedFilters: string[]) => {
+        setSearchParams(params => {
+            params.delete("filter");
+            selectedFilters.forEach(filter => params.append("filter", filter));
+            return params;
+        });
+        setFilters(selectedFilters);
+    };
+    const handleDateChange = (date: Dayjs | null) => {
+        setSelectedDate(date);
+    };
     useEffect(() => {
         if (currentPage > totalPages) {
             setCurrentPage(1);
@@ -61,7 +88,6 @@ export const Helps = () => {
     if (!favoritesHelps) {
         return null;
     }
-
     return (
         <Paper variant="outlined" elevation={0} square sx={{
             display: "flex", flexDirection: "column", alignItems: "flex-start",
@@ -69,7 +95,9 @@ export const Helps = () => {
         }}>
             <Typography variant="h4" mb="20px">Запросы о помощи</Typography>
             <Box display="flex" gap="20px" width="100%">
-                <FilterController/>
+                <FilterController onFilterChange={handleFilterChange} selectedFilters={filters}
+                                  selectedDate={selectedDate}
+                                  onDateChange={handleDateChange}/>
                 <Box display="flex" flexDirection="column" width="100%" gap="32px">
                     <SearchInput searchTerm={searchTerm} onSearchChange={handleSearchChange}/>
                     <Paper variant="outlined" elevation={0} sx={{

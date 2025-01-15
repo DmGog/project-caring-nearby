@@ -12,8 +12,61 @@ import {
 } from "@mui/material";
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, {Dayjs} from "dayjs";
+import {useSearchParams} from "react-router-dom";
+import {useEffect} from "react";
 
-export const FilterController = () => {
+type Props = {
+    selectedFilters: string[];
+    onFilterChange: (selectedFilters: string[]) => void;
+    selectedDate: Dayjs | null;
+    onDateChange: (date: Dayjs | null) => void;
+}
+
+export const FilterController = ({selectedFilters, onFilterChange, selectedDate, onDateChange}: Props) => {
+
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    useEffect(() => {
+        const filtersFromParams = searchParams.getAll("filter");
+        const dateFromParams = searchParams.get("date");
+        if (filtersFromParams.length > 0) {
+            onFilterChange(filtersFromParams);
+        }
+        if (dateFromParams) {
+            onDateChange(dayjs(dateFromParams));
+        }
+    }, []);
+
+    const handleChange = (filter: string) => {
+        const newFilters = selectedFilters.includes(filter)
+            ? selectedFilters.filter(f => f !== filter)
+            : [...selectedFilters, filter];
+        onFilterChange(newFilters);
+        setSearchParams(params => {
+            params.delete("filter");
+            newFilters.forEach(filter => params.append("filter", filter));
+            return params;
+        });
+    };
+
+    const handleDateChange = (date: Dayjs | null) => {
+        onDateChange(date);
+        setSearchParams(params => {
+            if (date) {
+                params.set("date", date.toISOString());
+            } else {
+                params.delete("date");
+            }
+            return params;
+        });
+    };
+
+    const handleResetFilters = () => {
+        onFilterChange([]);
+        onDateChange(null);
+        setSearchParams({});
+    };
     return (
         <Box sx={{
             padding: "20px 20px 30px",
@@ -28,16 +81,27 @@ export const FilterController = () => {
             <FormGroup sx={{marginBottom: "20px"}}>
                 <FormLabel>Кому мы помогаем</FormLabel>
                 <FormControlLabel sx={{paddingLeft: "9px"}} control={<Checkbox color={"primary"} size={"medium"}/>}
-                                  label="Пенсионеры"/>
+                                  label="Пенсионеры"
+                                  checked={selectedFilters.includes("person")}
+                                  onChange={() => handleChange("person")}/>
                 <FormControlLabel sx={{paddingLeft: "9px"}} control={<Checkbox color={"primary"} size={"medium"}/>}
-                                  label="Дома престарелых"/>
+                                  label="Дома престарелых"
+                                  checked={selectedFilters.includes("organization")}
+                                  onChange={() => handleChange("organization")}
+                />
             </FormGroup>
             <FormGroup>
                 <FormLabel>Чем мы помогаем</FormLabel>
                 <FormControlLabel sx={{paddingLeft: "9px"}} control={<Checkbox color={"primary"} size={"medium"}/>}
-                                  label="Вещи"/>
+                                  label="Вещи"
+                                  checked={selectedFilters.includes("material")}
+                                  onChange={() => handleChange("material")}
+                />
                 <FormControlLabel sx={{paddingLeft: "9px"}} control={<Checkbox color={"primary"} size={"medium"}/>}
-                                  label="Финансирование"/>
+                                  label="Финансирование"
+                                  checked={selectedFilters.includes("finance")}
+                                  onChange={() => handleChange("finance")}
+                />
             </FormGroup>
             <Accordion sx={{marginBottom: "20px"}}>
                 <AccordionSummary
@@ -53,28 +117,47 @@ export const FilterController = () => {
                         <FormLabel>Специализация</FormLabel>
                         <FormControlLabel sx={{paddingLeft: "9px"}}
                                           control={<Checkbox color={"primary"} size={"medium"}/>}
-                                          label="Квалифицированная"/>
+                                          label="Квалифицированная"
+                                          checked={selectedFilters.includes("professional")}
+                                          onChange={() => handleChange("professional")}
+
+                        />
                         <FormControlLabel sx={{paddingLeft: "9px"}}
                                           control={<Checkbox color={"primary"} size={"medium"}/>}
-                                          label="Не требует профессии"/>
+                                          label="Не требует профессии"
+                                          checked={selectedFilters.includes("common")}
+                                          onChange={() => handleChange("common")}
+                        />
                     </FormGroup>
                     <FormGroup sx={{marginBottom: "16px"}}>
                         <FormLabel>Формат</FormLabel>
                         <FormControlLabel sx={{paddingLeft: "9px"}}
                                           control={<Checkbox color={"primary"} size={"medium"}/>}
-                                          label="Онлайн"/>
+                                          label="Онлайн"
+                                          checked={selectedFilters.includes("true")}
+                                          onChange={() => handleChange("true")}
+                        />
                         <FormControlLabel sx={{paddingLeft: "9px"}}
                                           control={<Checkbox color={"primary"} size={"medium"}/>}
-                                          label="Офлайн"/>
+                                          label="Офлайн"
+                                          checked={selectedFilters.includes("false")}
+                                          onChange={() => handleChange("false")}
+                        />
                     </FormGroup>
                     <FormGroup>
                         <FormLabel>Необходимо волонтеров</FormLabel>
                         <FormControlLabel sx={{paddingLeft: "9px"}}
                                           control={<Checkbox color={"primary"} size={"medium"}/>}
-                                          label="Группа"/>
+                                          label="Группа"
+                                          checked={selectedFilters.includes("group")}
+                                          onChange={() => handleChange("group")}
+                        />
                         <FormControlLabel sx={{paddingLeft: "9px"}}
                                           control={<Checkbox color={"primary"} size={"medium"}/>}
-                                          label="Один"/>
+                                          label="Один"
+                                          checked={selectedFilters.includes("single")}
+                                          onChange={() => handleChange("single")}
+                        />
                     </FormGroup>
                 </AccordionDetails>
             </Accordion>
@@ -83,10 +166,14 @@ export const FilterController = () => {
                     marginBottom: "10px"
                 }}>Помощь актуальна до:</FormLabel>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label={"Выберите дату"}/>
+                    <DatePicker label={"Выберите дату"}
+                                value={selectedDate}
+                                onChange={handleDateChange}
+                    />
                 </LocalizationProvider>
             </FormGroup>
-            <Button size={"large"} color={"inherit"} variant={"outlined"} fullWidth>CБРОСИТЬ</Button>
+            <Button onClick={handleResetFilters} size={"large"} color={"inherit"} variant={"outlined"}
+                    fullWidth>CБРОСИТЬ</Button>
         </Box>
     );
 };

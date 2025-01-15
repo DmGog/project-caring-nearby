@@ -22,9 +22,9 @@ type Contacts = {
 };
 
 type HelperRequirements = {
-    helperType: string;
+    helperType: "group" | "single";
     isOnline: boolean;
-    qualification: string;
+    qualification: "common"|"professional";
 };
 
 export type HelpRequest = {
@@ -38,7 +38,7 @@ export type HelpRequest = {
     location: Location;
     contacts: Contacts;
     requesterType: "person" | "organization";
-    helpType: "finance"|"material"
+    helpType: "finance" | "material"
     helperRequirements: HelperRequirements;
     contributorsCount: number;
     requestGoal: number;

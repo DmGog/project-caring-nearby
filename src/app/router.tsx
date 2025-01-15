@@ -1,5 +1,5 @@
 import {Route, Routes} from "react-router";
-import {Help, LoginPage, NotFoundPage, Profile} from "@/pages";
+import {Helps, LoginPage, NotFoundPage, Profile, Request} from "@/pages";
 import {Contacts, Favorites, PersonalData} from "@/features";
 
 export const PATH = {
@@ -11,7 +11,11 @@ export const PATH = {
         PROFILE_PAGE_FAVORITES: "/profile/favorites",
         PROFILE_PAGE_CONTACTS: "/profile/contacts"
     },
-    HELP: "/help"
+    HELPS:{
+        HELPS_PAGE: "/helps",
+        REQUEST_HELP: "/helps/request/:id",
+    },
+
 
 } as const
 
@@ -24,7 +28,8 @@ export const Routing = () => {
                 <Route path={PATH.PROFILE.PROFILE_PAGE_FAVORITES} element={<Favorites/>}/>
                 <Route path={PATH.PROFILE.PROFILE_PAGE_CONTACTS} element={<Contacts/>}/>
             </Route>
-            <Route path={PATH.HELP} element={<Help/>}/>
+            <Route path={PATH.HELPS.HELPS_PAGE} element={<Helps/>}/>
+            <Route path={PATH.HELPS.REQUEST_HELP} element={<Request/>}/>
             <Route path={PATH.NOT_FOUND_PAGE} element={<NotFoundPage/>}/>
         </Routes>
     )

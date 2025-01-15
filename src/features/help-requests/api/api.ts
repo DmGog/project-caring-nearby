@@ -1,5 +1,5 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import {HelpRequests} from "./types";
+import {HelpRequest, HelpRequests} from "./types";
 
 export const helpRequestsApi = createApi({
     reducerPath: "helpRequestsApi",
@@ -20,14 +20,20 @@ export const helpRequestsApi = createApi({
             providesTags: ["HelpRequest"],
             keepUnusedDataFor: 5,
         }),
+        helpRequestById: builder.query<HelpRequest, string>({
+            query: (id) => ({
+                method: "GET",
+                url: `api/request/${id}`
+            }),
+        }),
         contribute: builder.mutation<string, { id: string }>({
-            query: ({ id }) => ({
+            query: ({id}) => ({
                 url: `api/request/${id}/contribution`,
-                method: 'POST',
+                method: "POST",
             }),
             invalidatesTags: ["HelpRequest"],
         }),
     }),
 });
 
-export const {useHelpRequestsQuery, useContributeMutation} = helpRequestsApi;
+export const {useHelpRequestsQuery, useContributeMutation, useHelpRequestByIdQuery} = helpRequestsApi;

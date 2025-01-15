@@ -2,11 +2,10 @@ import {
     CardMap,
     HelpRequest,
     HelpRequests,
-    NotFoundResult,
     useHelpRequestsQuery,
     useUserHelpRequestsQuery
 } from "@/features";
-import {AlignmentType, ToggleButtonsGroup} from "@/shared";
+import {AlignmentType, NotFoundResult, ToggleButtonsGroup} from "@/shared";
 import {CardsListItemRequest, CardsRequest} from "@/widgets";
 import {Box, Pagination} from "@mui/material";
 import {useState} from "react";
@@ -23,9 +22,9 @@ export const Favorites = () => {
     };
 
     if (!helpRequests) {
-        return <NotFoundResult/>;
+        return <NotFoundResult title={"Ошибка! Не удалось загрузить информацию"} img={"infoNotImage"}/>;
     } else if (helpRequests.length < 1) {
-        return <NotFoundResult/>;
+        return <NotFoundResult title={"Запросы не найдены"} img={"resultNotImage"} color={"red"}/>;
     }
 
     const favoriteRequests: HelpRequests = favoritesHelps
@@ -35,9 +34,11 @@ export const Favorites = () => {
         : [];
 
     if (favoriteRequests.length < 1) {
-        return <NotFoundResult/>
+        return <NotFoundResult title={"Запросы не найдены"} img={"resultNotImage"}/>
     }
-    if (!favoritesHelps) return null
+    if (!favoritesHelps) return <NotFoundResult title={"Ошибка! Не удалось загрузить информацию"}
+                                                img={"infoNotImage"}
+                                                color={"red"}/>
 
     const itemsPerPage = 3;
     const indexOfLastItem = currentPage * itemsPerPage;

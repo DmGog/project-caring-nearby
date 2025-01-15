@@ -1,14 +1,20 @@
 import {
-    useAddHelpRequestFavouritesMutation, useContributeMutation,
+    useAddHelpRequestFavouritesMutation,
+    useContributeMutation,
     useRemoveHelpRequestFavouritesMutation
 } from "@/features";
 import {toast} from "react-toastify";
-import {FetchBaseQueryError} from "@reduxjs/toolkit/query";
+import {useNavigate} from "react-router";
+import {PATH} from "@/app/router";
 
 export const useHelpRequest = () => {
     const [addFavorite] = useAddHelpRequestFavouritesMutation();
     const [removeFavorite] = useRemoveHelpRequestFavouritesMutation();
     const [addContribute] = useContributeMutation()
+    const navigate = useNavigate()
+    const handleNavigateRequestHelp = (id: string) => {
+        navigate(PATH.HELPS.REQUEST_HELP.replace(":id", id))
+    }
 
     const handleAddContribute = async (id: string) => {
         try {
@@ -42,6 +48,7 @@ export const useHelpRequest = () => {
 
     return {
         handleAddContribute,
+        handleNavigateRequestHelp,
         handleAddFavorite: (id: string) => handleFavoriteAction(id, "add"),
         handleRemoveFavorite: (id: string) => handleFavoriteAction(id, "remove")
     };

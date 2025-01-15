@@ -32,7 +32,7 @@ export const CardListItemRequest = ({
                                         isFavorite,
                                         id
                                     }: Props) => {
-    const {handleRemoveFavorite, handleAddFavorite, handleAddContribute} = useHelpRequest()
+    const {handleRemoveFavorite, handleAddFavorite, handleAddContribute, handleNavigateRequestHelp} = useHelpRequest()
     return (
         <ListItem sx={{
             width: "1008px",
@@ -43,7 +43,7 @@ export const CardListItemRequest = ({
             "&:hover": {
                 boxShadow: 6,
             },
-        }}>
+        }} onClick={() => handleNavigateRequestHelp(id)}>
             <Stack direction="row" justifyContent="space-between">
                 <Stack sx={{width: "25%", display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
                     <Typography variant="h5" mb="30px">
@@ -67,7 +67,10 @@ export const CardListItemRequest = ({
                         </Box>
                         <Typography variant="body2" mb="10px" color="textSecondary">Нас
                             уже: {formatNumber(contributorsCount)}</Typography>
-                        <Button onClick={() => handleAddContribute(id)} variant="contained" fullWidth>Помочь</Button>
+                        <Button onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddContribute(id)
+                        }} variant="contained" fullWidth>Помочь</Button>
                     </Box>
                 </Stack>
 
@@ -111,7 +114,10 @@ export const CardListItemRequest = ({
                         </Typography>
                     </Box>
                 </Stack>
-                <Button onClick={() => (isFavorite ? handleRemoveFavorite(id) : handleAddFavorite(id))} size="small"
+                <Button onClick={(e) => {
+                    e.stopPropagation();
+                    (isFavorite ? handleRemoveFavorite(id) : handleAddFavorite(id))
+                }} size="small"
                         color="inherit"
                         variant="outlined" startIcon={isFavorite ? <Star/> : <StarBorder/>}
                         sx={{

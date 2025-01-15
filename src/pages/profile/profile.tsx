@@ -4,18 +4,19 @@ import {Outlet, useNavigate} from "react-router";
 import {useUserProfileQuery} from "@/features";
 import {Box, Button, CardContent, CardMedia, Paper, Typography} from "@mui/material";
 import {PATH} from "@/app/router";
-import {TabsComponent} from "@/shared";
+import {NotFoundResult, TabsComponent} from "@/shared";
 
 
 export const Profile = () => {
     const {data} = useUserProfileQuery()
-    console.log(data)
     const navigate = useNavigate();
     const handleLogOut = () => {
         sessionStorage.clear()
         navigate(PATH.LOGIN_PAGE);
     }
-    if (!data) return null;
+    if (!data) return <NotFoundResult img={"infoNotImage"}
+                                      title={"Ошибка! Не удалось загрузить информацию."}
+                                      color={"red"}/>;
     return (
         <div className={s.profile}>
             <Typography variant={"h4"} sx={{

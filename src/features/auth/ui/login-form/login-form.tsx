@@ -61,7 +61,7 @@ export const LoginForm = () => {
                 sessionStorage.setItem("auth", JSON.stringify(res.auth));
                 sessionStorage.setItem("token", JSON.stringify(res.token));
                 toast.success("Данные успешно загружены")
-                navigate(PATH.HELP);
+                navigate(PATH.HELPS.HELPS_PAGE);
             } else {
                 toast.error("Ошибка! Попробуйте еще раз")
             }

@@ -1,10 +1,9 @@
 import {configureStore} from "@reduxjs/toolkit";
 import {useDispatch, useSelector} from "react-redux";
 import {appReducer} from "@/entities/app/model/app-slice";
-import {helpRequestsApi} from "@/features/help-request";
 import {profileApi} from "@/features/my-profile";
 import {signInApi} from "@/features/auth";
-
+import {helpRequestsApi} from "@/features/help-requests";
 
 
 export const store = configureStore({

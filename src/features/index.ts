@@ -1,3 +1,3 @@
 export * from "./auth"
 export * from "./my-profile"
-export * from "./help-request"
+export * from "./help-requests"

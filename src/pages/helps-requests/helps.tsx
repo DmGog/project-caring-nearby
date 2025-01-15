@@ -1,11 +1,11 @@
 import {Box, Pagination, Paper, Typography} from "@mui/material";
 import {CardsListItemRequest, CardsRequest, FilterController} from "@/widgets";
 import {CardMap, useHelpRequestsQuery, useUserHelpRequestsQuery} from "@/features";
-import {AlignmentType, SearchInput, ToggleButtonsGroup} from "@/shared";
+import {AlignmentType, NotFoundResult, SearchInput, ToggleButtonsGroup} from "@/shared";
 import {useState} from "react";
 
 
-export const Help = () => {
+export const Helps = () => {
     const {data} = useHelpRequestsQuery()
     const {data: favoritesHelps} = useUserHelpRequestsQuery();
     const [alignment, setAlignment] = useState<AlignmentType>("left");
@@ -23,7 +23,7 @@ export const Help = () => {
         setCurrentPage(value);
     };
     if (!data) {
-        return null
+        return <NotFoundResult img={"infoNotImage"} title={"Ошибка! Не удалось загрузить запросы"} color={"red"}/>
     }
     if (!favoritesHelps) {
         return null

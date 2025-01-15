@@ -48,7 +48,7 @@ export const CardRequest = ({
                                 id, isFavorite
                             }: Props) => {
 
-    const {handleAddFavorite, handleRemoveFavorite, handleAddContribute} = useHelpRequest()
+    const {handleAddFavorite, handleRemoveFavorite, handleAddContribute, handleNavigateRequestHelp} = useHelpRequest()
 
     let cardImage;
     if (helpType === "finance" && requesterType === "person") {
@@ -61,7 +61,7 @@ export const CardRequest = ({
     }
 
     return (
-        <Card sx={{
+        <Card onClick={() => handleNavigateRequestHelp(id)} sx={{
             width: "320px",
             display: "flex",
             flexDirection: "column",
@@ -83,7 +83,10 @@ export const CardRequest = ({
                         {removeBrackets(titleCard)}
                     </Typography>
                     <IconButton
-                        onClick={() => (isFavorite ? handleRemoveFavorite(id) : handleAddFavorite(id))}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            (isFavorite ? handleRemoveFavorite(id) : handleAddFavorite(id))
+                        }}
                         sx={{
                             marginLeft: "10px",
                             border: "1px solid rgba(0, 0, 0, 0.12)",
@@ -129,7 +132,10 @@ export const CardRequest = ({
                     </Box>
                     <Typography variant="body2" mb="10px" color="textSecondary">Нас
                         уже: {formatNumber(contributorsCount)}</Typography>
-                    <Button onClick={() => handleAddContribute(id)} size="large" color="primary"
+                    <Button onClick={(e) => {
+                        handleAddContribute(id)
+                        e.stopPropagation();
+                    }} size="large" color="primary"
                             variant="contained"
                             fullWidth>Помочь</Button>
                 </CardContent>

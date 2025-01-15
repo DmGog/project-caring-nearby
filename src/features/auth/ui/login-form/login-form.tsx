@@ -60,7 +60,7 @@ export const LoginForm = () => {
             if (res) {
                 sessionStorage.setItem("auth", JSON.stringify(res.auth));
                 sessionStorage.setItem("token", JSON.stringify(res.token));
-                toast.success("Данные успешно загружены")
+                toast.success("Авторизация прошла успешно")
                 navigate(PATH.HELPS.HELPS_PAGE);
             } else {
                 toast.error("Ошибка! Попробуйте еще раз")

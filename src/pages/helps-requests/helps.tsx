@@ -2,7 +2,7 @@ import {Box, Pagination, Paper, Typography} from "@mui/material";
 import {CardsListItemRequest, CardsRequest, FilterController} from "@/widgets";
 import {CardMap, useHelpRequestsQuery, useUserHelpRequestsQuery} from "@/features";
 import {AlignmentType, NotFoundResult, SearchInput, ToggleButtonsGroup} from "@/shared";
-import {useState, useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useSearchParams} from "react-router-dom";
 import debounce from "lodash.debounce";
 import dayjs, {Dayjs} from "dayjs";
@@ -21,10 +21,10 @@ export const Helps = () => {
     const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
 
     useEffect(() => {
-        const filtered = (data || []).filter(item => {
-            const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.organization.title.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesFilters = filters.length === 0 || filters.some(filter =>
+
+        let filtered = (data || []).filter(item => {
+
+            const matchesFilters = filters.length === 0 || filters.every(filter =>
                 item.requesterType.includes(filter) ||
                 item.helpType.includes(filter) ||
                 item.helperRequirements.qualification.includes(filter) ||
@@ -32,10 +32,19 @@ export const Helps = () => {
                 (filter === "true" && item.helperRequirements.isOnline) ||
                 (filter === "false" && !item.helperRequirements.isOnline)
             );
+
             const matchesDate = selectedDate ? dayjs(item.endingDate).isSame(selectedDate, "day") : true;
 
-            return matchesSearch && matchesFilters && matchesDate;
+            return matchesFilters && matchesDate;
         });
+
+        if (searchTerm) {
+            filtered = filtered.filter(item =>
+                item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.organization.title.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+
         setFilteredData(filtered);
     }, [data, searchTerm, filters, selectedDate]);
 
@@ -44,14 +53,12 @@ export const Helps = () => {
         setSearchParams(value ? {search: value} : {});
         if (value.trim()) {
             const lowercasedValue = value.toLowerCase();
-            const filtered = (data || []).filter(item =>
+            const filtered = (filteredData || data || []).filter(item =>
                 item.title.toLowerCase().includes(lowercasedValue) ||
                 item.organization.title.toLowerCase().includes(lowercasedValue)
             );
             setFilteredData(filtered);
             setCurrentPage(1);
-        } else {
-            setFilteredData(data || []);
         }
     }, 500);
 

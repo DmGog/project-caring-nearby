@@ -172,7 +172,9 @@ export const FilterController = ({selectedFilters, onFilterChange, selectedDate,
                     />
                 </LocalizationProvider>
             </FormGroup>
-            <Button onClick={handleResetFilters} size={"large"} color={"inherit"} variant={"outlined"}
+            <Button disabled={selectedFilters.length < 1 && !selectedDate } onClick={handleResetFilters} size={"large"}
+                    color={"inherit"}
+                    variant={"outlined"}
                     fullWidth>CБРОСИТЬ</Button>
         </Box>
     );

@@ -92,7 +92,6 @@ export const LoginForm = () => {
                         <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
                         <OutlinedInput
                             {...register("password")}
-                            required
                             placeholder={"Введите пароль"}
                             id="outlined-adornment-password"
                             type={showPassword ? "text" : "password"}

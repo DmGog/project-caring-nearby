@@ -22,7 +22,7 @@ export const Favorites = () => {
     };
 
     if (!helpRequests) {
-        return <NotFoundResult title={"Ошибка! Не удалось загрузить информацию"} img={"infoNotImage"} color={"red"}/>;
+        return <NotFoundResult title={"Ошибка! Не удалось загрузить запросы"} img={"infoNotImage"} color={"red"}/>;
     } else if (helpRequests.length < 1) {
         return <NotFoundResult title={"Запросы не найдены"} img={"resultNotImage"} color={"red"}/>;
     }
@@ -36,7 +36,7 @@ export const Favorites = () => {
     if (favoriteRequests.length < 1) {
         return <NotFoundResult title={"Запросы не найдены"} img={"resultNotImage"}/>
     }
-    if (!favoritesHelps) return <NotFoundResult title={"Ошибка! Не удалось загрузить информацию"}
+    if (!favoritesHelps) return <NotFoundResult title={"Ошибка! Не удалось загрузить запросы"}
                                                 img={"infoNotImage"}
                                                 color={"red"}/>
 

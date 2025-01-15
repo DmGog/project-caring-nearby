@@ -36,7 +36,7 @@ export const Helps = () => {
         } else {
             setFilteredData(data || []);
         }
-    }, 1500);
+    }, 500);
 
     const handleSearchChange = (value: string) => {
         setSearchTerm(value);
@@ -73,7 +73,7 @@ export const Helps = () => {
                 <Box display="flex" flexDirection="column" width="100%" gap="32px">
                     <SearchInput searchTerm={searchTerm} onSearchChange={handleSearchChange}/>
                     <Paper variant="outlined" elevation={0} sx={{
-                        width: "100%", backgroundColor: "#FFFFFF", padding: "12px 36px 40px",
+                        width: "1080px", backgroundColor: "#FFFFFF", padding: "12px 36px 40px",
                     }}>
                         <Box display="flex" alignItems="center" justifyContent="space-between" width="100%"
                              height="40px" mb="20px">
@@ -96,7 +96,7 @@ export const Helps = () => {
                                 {alignment !== "right" && (
                                     <Pagination
                                         sx={{mt: "30px"}}
-                                        count={Math.ceil(filteredData.length / itemsPerPage)}
+                                        count={totalPages}
                                         page={currentPage}
                                         onChange={(_, value) => handlePageChange(value)}
                                         color="primary"

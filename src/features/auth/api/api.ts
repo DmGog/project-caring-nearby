@@ -1,26 +1,16 @@
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import {SignInArgs, SignInResponse} from "@/features/auth/api/types";
+import {SignInArgs, SignInResponse} from "./types";
+import {baseApi} from "@/app";
 
-
-export const signInApi = createApi({
-    reducerPath: "signInApi",
-    baseQuery: fetchBaseQuery({
-        baseUrl: "https://natticharity.eveloth.ru/"
-    }),
-
-    endpoints: builder => ({
+export const signInApi = baseApi.injectEndpoints({
+    endpoints: (builder) => ({
         login: builder.mutation<SignInResponse, SignInArgs>({
-            query: body => ({
-                url: "api/auth",
+            query: (body) => ({
+                url: "auth",
                 method: "POST",
-                body,
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                },
+                body
             }),
         }),
     }),
 });
 
-export const {useLoginMutation} = signInApi
+export const {useLoginMutation} = signInApi;

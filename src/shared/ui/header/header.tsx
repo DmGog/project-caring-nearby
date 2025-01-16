@@ -11,7 +11,7 @@ import AvatarIcon from "@/shared/assets/icons/avatar.svg"
 
 
 export const Header = () => {
-    const isAuth = sessionStorage.getItem("auth")
+    const isAuth = localStorage.getItem("auth")
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const navigate = useNavigate();
     const handleClickAvatar = (event: MouseEvent<HTMLElement>) => {
@@ -27,7 +27,7 @@ export const Header = () => {
     }
 
     const handleClickExit = () => {
-        sessionStorage.clear()
+        localStorage.clear()
         navigate(PATH.LOGIN_PAGE);
         handleClosePopover();
     }

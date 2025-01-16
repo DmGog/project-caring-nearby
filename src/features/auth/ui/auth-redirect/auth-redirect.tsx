@@ -5,7 +5,7 @@ import {PATH} from "@/app/router";
 
 export const AuthRedirect = () => {
     const navigate = useNavigate();
-    const isAuth = sessionStorage.getItem("auth");
+    const isAuth = localStorage.getItem("auth");
 
     useEffect(() => {
         if (!isAuth) {

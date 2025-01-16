@@ -29,8 +29,8 @@ export const Helps = () => {
                 item.helpType.includes(filter) ||
                 item.helperRequirements.qualification.includes(filter) ||
                 item.helperRequirements.helperType.includes(filter) ||
-                (filter === "true" && item.helperRequirements.isOnline) ||
-                (filter === "false" && !item.helperRequirements.isOnline)
+                (filter === "online" && item.helperRequirements.isOnline) ||
+                (filter === "offline" && !item.helperRequirements.isOnline)
             );
 
             const matchesDate = selectedDate ? dayjs(item.endingDate).isSame(selectedDate, "day") : true;

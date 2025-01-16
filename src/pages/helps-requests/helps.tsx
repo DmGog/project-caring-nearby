@@ -10,8 +10,9 @@ import dayjs, {Dayjs} from "dayjs";
 export const Helps = () => {
     const {data} = useHelpRequestsQuery();
     const {data: favoritesHelps} = useUserHelpRequestsQuery();
-    const [alignment, setAlignment] = useState<AlignmentType>("left");
     const [searchParams, setSearchParams] = useSearchParams();
+    const initialAlignment = (searchParams.get("view") as AlignmentType) || "left";
+    const [alignment, setAlignment] = useState<AlignmentType>(initialAlignment);
     const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
     const [filteredData, setFilteredData] = useState(data || []);
     const [currentPage, setCurrentPage] = useState(1);
@@ -20,8 +21,21 @@ export const Helps = () => {
     const [filters, setFilters] = useState<string[]>(searchParams.getAll("filter"));
     const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
 
-    useEffect(() => {
+    const handleAlignmentChange = (newAlignment: AlignmentType) => {
+        setAlignment(newAlignment);
+        setSearchParams(params => {
+            params.set("view", newAlignment);
+            return params;
+        });
+    };
 
+    useEffect(() => {
+        if (!searchParams.has("view")) {
+            setSearchParams(params => {
+                params.set("view", "left");
+                return params;
+            });
+        }
         let filtered = (data || []).filter(item => {
 
             const matchesFilters = filters.length === 0 || filters.every(filter =>
@@ -113,7 +127,7 @@ export const Helps = () => {
                         <Box display="flex" alignItems="center" justifyContent="space-between" width="100%"
                              height="40px" mb="20px">
                             <Typography variant="h6">Найдено: {filteredData.length}</Typography>
-                            <ToggleButtonsGroup alignment={alignment} onAlignmentChange={setAlignment}/>
+                            <ToggleButtonsGroup alignment={alignment} onAlignmentChange={handleAlignmentChange}/>
                         </Box>
                         {!data ?
                             <NotFoundResult img="infoNotImage"

@@ -8,7 +8,8 @@ import {
 import {AlignmentType, NotFoundResult, ToggleButtonsGroup} from "@/shared";
 import {CardsListItemRequest, CardsRequest} from "@/widgets";
 import {Box, Pagination} from "@mui/material";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useSearchParams} from "react-router-dom";
 
 
 export const Favorites = () => {
@@ -16,10 +17,24 @@ export const Favorites = () => {
     const {data: favoritesHelps} = useUserHelpRequestsQuery();
     const [currentPage, setCurrentPage] = useState(1);
 
-    const [alignment, setAlignment] = useState<AlignmentType>("left");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const initialAlignment = (searchParams.get("view") as AlignmentType) || "left";
+    const [alignment, setAlignment] = useState<AlignmentType>(initialAlignment);
     const handleAlignmentChange = (newAlignment: AlignmentType) => {
         setAlignment(newAlignment);
+        setSearchParams(params => {
+            params.set("view", newAlignment);
+            return params;
+        });
     };
+
+    useEffect(() => {
+        if (!searchParams.has("view")) {
+            setSearchParams(params => {
+                params.set("view", "left");
+                return params;
+            });
+        }})
 
     if (!helpRequests) {
         return <NotFoundResult title={"Ошибка! Не удалось загрузить запросы"} img={"infoNotImage"} color={"red"}/>;

@@ -5,13 +5,15 @@ import {useUserProfileQuery} from "@/features";
 import {Box, Button, CardContent, CardMedia, Paper, Typography} from "@mui/material";
 import {PATH} from "@/app/router";
 import {NotFoundResult, TabsComponent} from "@/shared";
+import {baseApi} from "@/app";
 
 
 export const Profile = () => {
     const {data} = useUserProfileQuery()
     const navigate = useNavigate();
     const handleLogOut = () => {
-        sessionStorage.clear()
+        localStorage.clear()
+        baseApi.util.resetApiState()
         navigate(PATH.LOGIN_PAGE);
     }
     return (

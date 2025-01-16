@@ -9,11 +9,10 @@ type Props = {
 }
 
 export const ToggleButtonsGroup = ({alignment = "left", onAlignmentChange}: Props) => {
-    const handleAlignment = (
-        _: MouseEvent<HTMLElement>,
-        newAlignment: AlignmentType,
-    ) => {
-        onAlignmentChange(newAlignment);
+    const handleAlignment = (_: MouseEvent<HTMLElement>, newAlignment: AlignmentType) => {
+        if (newAlignment) {
+            onAlignmentChange(newAlignment);
+        }
     };
 
     return (
@@ -33,7 +32,7 @@ export const ToggleButtonsGroup = ({alignment = "left", onAlignmentChange}: Prop
             <ToggleButton size={"small"} value="center" aria-label="list">
                 <ListAltRounded/>
             </ToggleButton>
-            <ToggleButton size={"small"} value="right" aria-label="right aligned">
+            <ToggleButton size={"small"} value="right" aria-label="map">
                 <LocationOn/>
             </ToggleButton>
         </ToggleButtonGroup>

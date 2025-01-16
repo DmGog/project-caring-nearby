@@ -8,6 +8,7 @@ import {PopoverProfile} from "@/shared";
 import {useState, MouseEvent} from "react";
 import {useNavigate} from "react-router";
 import AvatarIcon from "@/shared/assets/icons/avatar.svg"
+import {baseApi} from "@/app";
 
 
 export const Header = () => {
@@ -28,6 +29,7 @@ export const Header = () => {
 
     const handleClickExit = () => {
         localStorage.clear()
+        baseApi.util.resetApiState()
         navigate(PATH.LOGIN_PAGE);
         handleClosePopover();
     }

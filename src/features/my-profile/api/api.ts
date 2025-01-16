@@ -9,7 +9,7 @@ export const profileApi = baseApi.injectEndpoints({
         }),
         userHelpRequests: builder.query<string[], void>({
             query: () => "user/favourites",
-            providesTags: ["HelpRequest"],
+            providesTags: ["Favourites"],
         }),
         addHelpRequestFavourites: builder.mutation<void, { requestId: string }>({
             query: (body) => ({
@@ -17,14 +17,14 @@ export const profileApi = baseApi.injectEndpoints({
                 method: "POST",
                 body,
             }),
-            invalidatesTags: ["HelpRequest"],
+            invalidatesTags: ["Favourites"],
         }),
         removeHelpRequestFavourites: builder.mutation<void, { requestId: string }>({
             query: ({requestId}) => ({
                 url: `user/favourites/${requestId}`,
                 method: "DELETE",
             }),
-            invalidatesTags: ["HelpRequest"],
+            invalidatesTags: ["Favourites"],
         }),
     }),
 });

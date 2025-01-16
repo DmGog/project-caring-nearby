@@ -133,7 +133,7 @@ export const CardRequest = ({
                     <Typography variant="body2" mb="10px" color="textSecondary">Нас
                         уже: {formatNumber(contributorsCount)}</Typography>
                     <Button onClick={(e) => {
-                        handleAddContribute(id)
+                        handleAddContribute(id);
                         e.stopPropagation();
                     }} size="large" color="primary"
                             variant="contained"

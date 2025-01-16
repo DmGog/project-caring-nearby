@@ -15,7 +15,7 @@ export const helpRequestsApi = baseApi.injectEndpoints({
                 url: `request/${id}/contribution`,
                 method: "POST",
             }),
-            invalidatesTags: ["HelpRequest"],
+            invalidatesTags: ["Contribution"],
         }),
     }),
 });

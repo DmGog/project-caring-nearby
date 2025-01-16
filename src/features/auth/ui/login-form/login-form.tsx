@@ -58,8 +58,8 @@ export const LoginForm = () => {
         try {
             const res = await logIn({login: data.login, password: data.password}).unwrap();
             if (res) {
-                sessionStorage.setItem("auth", JSON.stringify(res.auth));
-                sessionStorage.setItem("token", JSON.stringify(res.token));
+                localStorage.setItem("auth", JSON.stringify(res.auth));
+                localStorage.setItem("token", JSON.stringify(res.token));
                 toast.success("Авторизация прошла успешно")
                 navigate(PATH.HELPS.HELPS_PAGE);
             } else {

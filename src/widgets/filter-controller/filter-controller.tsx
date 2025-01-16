@@ -134,14 +134,14 @@ export const FilterController = ({selectedFilters, onFilterChange, selectedDate,
                         <FormControlLabel sx={{paddingLeft: "9px"}}
                                           control={<Checkbox color={"primary"} size={"medium"}/>}
                                           label="Онлайн"
-                                          checked={selectedFilters.includes("true")}
-                                          onChange={() => handleChange("true")}
+                                          checked={selectedFilters.includes("online")}
+                                          onChange={() => handleChange("online")}
                         />
                         <FormControlLabel sx={{paddingLeft: "9px"}}
                                           control={<Checkbox color={"primary"} size={"medium"}/>}
                                           label="Офлайн"
-                                          checked={selectedFilters.includes("false")}
-                                          onChange={() => handleChange("false")}
+                                          checked={selectedFilters.includes("offline")}
+                                          onChange={() => handleChange("offline")}
                         />
                     </FormGroup>
                     <FormGroup>

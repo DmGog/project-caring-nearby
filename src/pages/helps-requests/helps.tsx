@@ -1,7 +1,7 @@
 import {Box, Pagination, Paper, Typography} from "@mui/material";
 import {CardsListItemRequest, CardsRequest, FilterController} from "@/widgets";
 import {CardMap, useHelpRequestsQuery, useUserHelpFavoritesRequestsQuery} from "@/features";
-import {AlignmentType, NotFoundResult, SearchInput, ToggleButtonsGroup} from "@/shared";
+import {NotFoundResult, SearchInput, ToggleButtonsGroup, usePaginationAndAlignment} from "@/shared";
 import {useEffect, useState} from "react";
 import {useSearchParams} from "react-router-dom";
 import debounce from "lodash.debounce";
@@ -11,23 +11,21 @@ export const Helps = () => {
     const {data} = useHelpRequestsQuery();
     const {data: favoritesHelps} = useUserHelpFavoritesRequestsQuery();
     const [searchParams, setSearchParams] = useSearchParams();
-    const initialAlignment = (searchParams.get("view") as AlignmentType) || "left";
-    const [alignment, setAlignment] = useState<AlignmentType>(initialAlignment);
     const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
     const [filteredData, setFilteredData] = useState(data || []);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 3;
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const [filters, setFilters] = useState<string[]>(searchParams.getAll("filter"));
     const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
 
-    const handleAlignmentChange = (newAlignment: AlignmentType) => {
-        setAlignment(newAlignment);
-        setSearchParams(params => {
-            params.set("view", newAlignment);
-            return params;
-        });
-    };
+    const {
+        currentPage,
+        totalPages,
+        alignment,
+        indexOfFirstItem,
+        indexOfLastItem,
+        handleAlignmentChange,
+        setCurrentPage
+    } = usePaginationAndAlignment(filteredData.length);
+
 
     useEffect(() => {
         if (!searchParams.has("view")) {
@@ -74,7 +72,7 @@ export const Helps = () => {
             setFilteredData(filtered);
             setCurrentPage(1);
         }
-    }, 500);
+    }, 600);
 
     const handleSearchChange = (value: string) => {
         setSearchTerm(value);
@@ -98,17 +96,8 @@ export const Helps = () => {
         }
     }, [totalPages, currentPage]);
 
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-    const handlePageChange = (value: number) => {
-        setCurrentPage(value);
-    };
-
-    if (!favoritesHelps) {
-        return null;
-    }
     return (
         <Paper variant="outlined" elevation={0} square sx={{
             display: "flex", flexDirection: "column", alignItems: "flex-start",
@@ -138,16 +127,16 @@ export const Helps = () => {
                                 {filteredData.length < 1 &&
                                     <NotFoundResult img={"resultNotImage"} title={"Запросы не найдены"}/>}
                                 {alignment === "left" &&
-                                    <CardsRequest data={currentItems} favoriteHelps={favoritesHelps}/>}
+                                    <CardsRequest data={currentItems} favoriteHelps={favoritesHelps??[]}/>}
                                 {alignment === "center" &&
-                                    <CardsListItemRequest data={currentItems} favoriteHelps={favoritesHelps}/>}
+                                    <CardsListItemRequest data={currentItems} favoriteHelps={favoritesHelps??[]}/>}
                                 {alignment === "right" && <CardMap/>}
                                 {alignment !== "right" && (
                                     <Pagination
                                         sx={{mt: "30px"}}
                                         count={totalPages}
                                         page={currentPage}
-                                        onChange={(_, value) => handlePageChange(value)}
+                                        onChange={(_, value) => setCurrentPage(value)}
                                         color="primary"
                                     />
                                 )}

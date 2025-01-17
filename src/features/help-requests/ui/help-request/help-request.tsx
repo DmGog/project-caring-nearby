@@ -1,15 +1,21 @@
 import {useHelpRequest, useHelpRequestByIdQuery, useUserHelpFavoritesRequestsQuery} from "@/features";
 import {Box, Button, Card, CardContent, LinearProgress, List, ListItem, Paper, Typography} from "@mui/material";
-import {CheckCircleOutlined, ErrorOutline, VerifiedRounded, StarBorder, Star} from "@mui/icons-material";
+import {CheckCircleOutlined, ErrorOutline, Star, StarBorder, VerifiedRounded} from "@mui/icons-material";
 import {formatDate, formatNumber, InfoRow, NotFoundResult, removeBrackets} from "@/shared";
 import {useParams} from "react-router";
+import {HelpPageSkeleton} from "../help-page-skeleton";
 
 export const Help = () => {
     const {id} = useParams()
-    const {data: helpRequest} = useHelpRequestByIdQuery(id ?? "");
-    const {data: userFavoriteHelps} = useUserHelpFavoritesRequestsQuery();
+    const {data: helpRequest, isLoading: isLoadingHelpRequest} = useHelpRequestByIdQuery(id ?? "");
+    const {data: userFavoriteHelps, isLoading: isLoadingFavoriteHelps} = useUserHelpFavoritesRequestsQuery();
     const {handleAddContribute, handleAddFavorite, handleRemoveFavorite} = useHelpRequest()
-    if ( !helpRequest) {
+
+    if (isLoadingHelpRequest || isLoadingFavoriteHelps) {
+        return <HelpPageSkeleton/>
+    }
+
+    if (!helpRequest) {
         return <NotFoundResult img={"infoNotImage"} title={"Ошибка! Не удалось загрузить информацию"} color={"red"}/>
     }
     let isFavorite = false
@@ -81,8 +87,8 @@ export const Help = () => {
                     <Typography variant="h6" mb="10px">Завершение</Typography>
                     <Typography variant="body2" mb="30px">{formatDate(helpRequest.endingDate)}</Typography>
                     <Typography variant="h6" mb="10px">Локация</Typography>
-                    <InfoRow label={"Область"} value={helpRequest.location.district}/>
-                    <InfoRow label={"Населенный пункт"} value={helpRequest.location.city}/>
+                    <InfoRow label="Область" value={helpRequest.location.district}/>
+                    <InfoRow label="Населенный пункт" value={helpRequest.location.city}/>
                     <Typography variant="h6" mt="30px" mb="10px">Контакты</Typography>
                     <Box display="flex" width="100%" alignItems="center" justifyContent="space-between">
                         <Box>
@@ -132,7 +138,7 @@ export const Help = () => {
                     </Typography>
                     <Typography variant="subtitle2" mb="4px">Завершение</Typography>
                     <Typography variant="body2" mb="20px">{formatDate(helpRequest.endingDate)}</Typography>
-                    <Box sx={{display: "flex", flexDirection: "column", width: "100%"}}>
+                    <Box display="flex" flexDirection="column" width="100%">
                         <Typography variant="subtitle2" mb="4px">
                             Мы собрали
                         </Typography>
@@ -140,7 +146,7 @@ export const Help = () => {
                             mb: "4px"
                         }} variant="determinate"
                                         value={Math.min((helpRequest.requestGoalCurrentValue / helpRequest.requestGoal) * 100, 100)}/>
-                        <Box sx={{display: "flex", justifyContent: "space-between", mb: "40px"}}>
+                        <Box display="flex" justifyContent="space-between" mb="40px">
                             <Typography variant="body2" color="textSecondary">
                                 {formatNumber(helpRequest.requestGoalCurrentValue)} руб
                             </Typography>

@@ -15,6 +15,9 @@ import {useSearchParams} from "react-router-dom";
 import {useEffect} from "react";
 import {FilterGroup} from "@/shared";
 import {mainFilters, volunteerActivity} from "./data";
+import "dayjs/locale/ru";
+
+dayjs.locale("ru");
 
 type Props = {
     selectedFilters: string[];

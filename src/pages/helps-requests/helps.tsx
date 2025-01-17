@@ -45,7 +45,7 @@ export const Helps = () => {
                 (filter === "offline" && !item.helperRequirements.isOnline)
             );
 
-            const matchesDate = selectedDate ? dayjs(item.endingDate).isSame(selectedDate, "day") : true;
+            const matchesDate = selectedDate ? dayjs(item.endingDate).isBefore(selectedDate, "day") : true;
 
             return matchesFilters && matchesDate;
         });
@@ -127,9 +127,9 @@ export const Helps = () => {
                                 {filteredData.length < 1 &&
                                     <NotFoundResult img={"resultNotImage"} title={"Запросы не найдены"}/>}
                                 {alignment === "left" &&
-                                    <CardsRequest data={currentItems} favoriteHelps={favoritesHelps??[]}/>}
+                                    <CardsRequest data={currentItems} favoriteHelps={favoritesHelps ?? []}/>}
                                 {alignment === "center" &&
-                                    <CardsListItemRequest data={currentItems} favoriteHelps={favoritesHelps??[]}/>}
+                                    <CardsListItemRequest data={currentItems} favoriteHelps={favoritesHelps ?? []}/>}
                                 {alignment === "right" && <CardMap/>}
                                 {alignment !== "right" && (
                                     <Pagination

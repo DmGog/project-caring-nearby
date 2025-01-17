@@ -1,24 +1,18 @@
-import s from "./app.module.scss"
 import {Footer, Header} from "@/shared";
 import {Routing} from "@/app/router";
-import {BrowserRouter} from "react-router";
-import {AuthRedirect} from "@/features";
 import {ToastContainer} from "react-toastify";
-
+import {Box} from "@mui/material";
 
 function App() {
     return (
-        <BrowserRouter>
-            <AuthRedirect/>
-            <div className={s.root}>
-                <Header/>
-                <div className={s.wrapper}>
-                    <Routing/>
-                </div>
-                <Footer/>
-                <ToastContainer position={"bottom-right"} theme={"light"} autoClose={1000}/>
-            </div>
-        </BrowserRouter>
+        <Box display="flex" flexDirection="column" alignItems="center" width="100%" minHeight="100vh">
+            <Header/>
+            <Box display="flex" flexGrow="1" width="100%" maxWidth="1500px" height="100%" paddingTop="84px">
+                <Routing/>
+            </Box>
+            <Footer/>
+            <ToastContainer position={"bottom-right"} theme={"light"} autoClose={1000}/>
+        </Box>
     );
 }
 

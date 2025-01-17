@@ -1,14 +1,7 @@
-import {
-    CardMap,
-    HelpRequest,
-    HelpRequests,
-    ProfilePageSkeleton,
-    useHelpRequestsQuery,
-    useUserHelpFavoritesRequestsQuery,
-} from "@/features";
+import {CardMap, HelpRequest, HelpRequests, useHelpRequestsQuery, useUserHelpFavoritesRequestsQuery,} from "@/features";
 import {NotFoundResult, ToggleButtonsGroup, usePaginationAndAlignment} from "@/shared";
 import {CardsListItemRequest, CardsRequest} from "@/widgets";
-import {Box, Pagination} from "@mui/material";
+import {Box, Pagination, Skeleton} from "@mui/material";
 
 
 export const Favorites = () => {
@@ -25,22 +18,13 @@ export const Favorites = () => {
         setCurrentPage
     } = usePaginationAndAlignment(favoritesHelps?.length ?? 0);
 
-    if (isLoading || isLoadingRequests) {
-        return <ProfilePageSkeleton/>
-    }
-
-    if (!helpRequests) {
-        return <NotFoundResult title={"Ошибка! Не удалось загрузить запросы"} img={"infoNotImage"} color={"red"}/>;
-    } else if (helpRequests.length < 1) {
-        return <NotFoundResult title={"Запросы не найдены"} img={"resultNotImage"} color={"red"}/>;
-    }
-
-    const favoriteRequests: HelpRequests = favoritesHelps
-        ? helpRequests.filter((request: HelpRequest) => favoritesHelps.includes(request.id))
-        : [];
+    const favoriteRequests: HelpRequests = helpRequests?.filter((request: HelpRequest) => favoritesHelps?.includes(request.id)) || [];
 
     const currentItems = favoriteRequests.slice(indexOfFirstItem, indexOfLastItem);
 
+    if (isLoading || isLoadingRequests) {
+        return <Skeleton variant="rounded" width="1008px" height="853px"/>
+    }
     return (
         <Box
             sx={{
@@ -61,15 +45,16 @@ export const Favorites = () => {
             {alignment === "left" && <CardsRequest data={currentItems} favoriteHelps={favoritesHelps ?? []}/>}
             {alignment === "center" && <CardsListItemRequest data={currentItems} favoriteHelps={favoritesHelps ?? []}/>}
             {alignment === "right" && <CardMap/>}
-            <Pagination
-                sx={{
-                    pt: "30px"
-                }}
-                count={totalPages}
-                page={currentPage}
-                onChange={(_, value) => setCurrentPage(value)}
-                color="primary"
-            />
+            {favoriteRequests.length >= 1 &&
+                <Pagination
+                    sx={{
+                        pt: "30px"
+                    }}
+                    count={totalPages}
+                    page={currentPage}
+                    onChange={(_, value) => setCurrentPage(value)}
+                    color="primary"
+                />}
         </Box>
     );
 };

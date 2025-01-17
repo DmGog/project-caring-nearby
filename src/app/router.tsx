@@ -7,16 +7,12 @@ export const PATH = {
     NOT_FOUND_PAGE: "/*",
     PROFILE: {
         PROFILE_PAGE: "/profile",
-        PROFILE_PAGE_PERSONAL_DATA: "/profile/user",
+        PROFILE_PAGE_PERSONAL_DATA: "/profile/data",
         PROFILE_PAGE_FAVORITES: "/profile/favorites",
         PROFILE_PAGE_CONTACTS: "/profile/contacts"
     },
-    HELPS:{
-        HELPS_PAGE: "/helps",
-        REQUEST_HELP: "/helps/request/:id",
-    },
-
-
+    HELPS_PAGE: "/helps",
+    REQUEST_HELP: "/request/:id",
 } as const
 
 export const Routing = () => {
@@ -28,8 +24,8 @@ export const Routing = () => {
                 <Route path={PATH.PROFILE.PROFILE_PAGE_FAVORITES} element={<Favorites/>}/>
                 <Route path={PATH.PROFILE.PROFILE_PAGE_CONTACTS} element={<Contacts/>}/>
             </Route>
-            <Route path={PATH.HELPS.HELPS_PAGE} element={<Helps/>}/>
-            <Route path={PATH.HELPS.REQUEST_HELP} element={<Request/>}/>
+            <Route path={PATH.HELPS_PAGE} element={<Helps/>}/>
+            <Route path={PATH.REQUEST_HELP} element={<Request/>}/>
             <Route path={PATH.NOT_FOUND_PAGE} element={<NotFoundPage/>}/>
         </Routes>
     )

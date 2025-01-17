@@ -14,7 +14,7 @@ import {useSearchParams} from "react-router-dom";
 
 export const Favorites = () => {
     const {data: helpRequests} = useHelpRequestsQuery();
-    const {data: favoritesHelps} = useUserHelpRequestsQuery();
+    const {data: favoritesHelps, isLoading} = useUserHelpRequestsQuery();
     const [currentPage, setCurrentPage] = useState(1);
 
     const [searchParams, setSearchParams] = useSearchParams();
@@ -34,7 +34,8 @@ export const Favorites = () => {
                 params.set("view", "left");
                 return params;
             });
-        }})
+        }
+    })
 
     if (!helpRequests) {
         return <NotFoundResult title={"Ошибка! Не удалось загрузить запросы"} img={"infoNotImage"} color={"red"}/>;
@@ -48,13 +49,6 @@ export const Favorites = () => {
         )
         : [];
 
-    if (favoriteRequests.length < 1) {
-        return <NotFoundResult title={"Запросы не найдены"} img={"resultNotImage"}/>
-    }
-    if (!favoritesHelps) return <NotFoundResult title={"Ошибка! Не удалось загрузить запросы"}
-                                                img={"infoNotImage"}
-                                                color={"red"}/>
-
     const itemsPerPage = 3;
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -63,6 +57,7 @@ export const Favorites = () => {
         setCurrentPage(value);
     };
 
+    if (!favoritesHelps) return null;
 
     return (
         <Box
@@ -75,13 +70,17 @@ export const Favorites = () => {
                 minHeight: "973px",
                 justifyContent: "space-between"
             }}>
-            <Box position="absolute" top="-40px" right="0px">
+            <Box  position="absolute" top="-40px" right="0px">
                 <ToggleButtonsGroup alignment={alignment} onAlignmentChange={handleAlignmentChange}/>
             </Box>
+            {!favoritesHelps &&
+                <NotFoundResult title={"Ошибка! Не удалось загрузить запросы"} img={"infoNotImage"} color={"red"}/>}
+            {favoriteRequests.length < 1 && <NotFoundResult title={"Запросы не найдены"} img={"resultNotImage"}/>}
             {alignment === "left" && <CardsRequest data={currentItems} favoriteHelps={favoritesHelps}/>}
             {alignment === "center" && <CardsListItemRequest data={currentItems} favoriteHelps={favoritesHelps}/>}
             {alignment === "right" && <CardMap/>}
             <Pagination
+                disabled={isLoading}
                 sx={{
                     pt: "30px"
                 }}

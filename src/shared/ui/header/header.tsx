@@ -46,11 +46,11 @@ export const Header = () => {
                 maxWidth: "1548px",
                 justifyContent: "space-between"
             }}>
-                <Link to={PATH.HELPS.HELPS_PAGE}>
+                <Link to={PATH.HELPS_PAGE}>
                     <LogoIcon/>
                 </Link>
                 <Box display="flex" width="100%" maxWidth="824px" alignItems="center" justifyContent="space-between">
-                    <Link to={PATH.HELPS.HELPS_PAGE} className={s.link}>
+                    <Link to={PATH.HELPS_PAGE} className={s.link}>
                         Запросы о помощи
                     </Link>
                     {!isAuth ? (

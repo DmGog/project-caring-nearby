@@ -14,7 +14,7 @@ export const useHelpRequest = () => {
     const [addContribute] = useContributeMutation()
     const navigate = useNavigate()
     const handleNavigateRequestHelp = (id: string) => {
-        navigate(PATH.HELPS.REQUEST_HELP.replace(":id", id))
+        navigate(PATH.REQUEST_HELP.replace(":id", id))
     }
 
     const handleAddContribute = async (id: string) => {

@@ -3,9 +3,14 @@ import {CardUser, ProfilePageSkeleton, useUserProfileQuery} from "@/features";
 import {Box, Paper, Typography} from "@mui/material";
 import {NotFoundResult, TabsComponent} from "@/shared";
 
-
 export const Profile = () => {
     const {data, isLoading} = useUserProfileQuery()
+
+    if (isLoading) return <ProfilePageSkeleton/>;
+
+    if (!data) {
+        return <NotFoundResult img="infoNotImage" title="Ошибка! Не удалось загрузить информацию" color="red"/>;
+    }
 
     return (
         <Box sx={{
@@ -14,32 +19,19 @@ export const Profile = () => {
             backgroundColor: "#f5f5f5",
             boxShadow: "0 0 0 1px #e0e0e0"
         }}>
-            {!data ?
-                <NotFoundResult img={"infoNotImage"}
-                                title={"Ошибка! Не удалось загрузить информацию"}
-                                color={"red"}/>
-                :
-                (<> <Typography variant="h4" mb="20px">Мой профиль</Typography>
-                        <Box display="flex" gap="20px">
-                            {isLoading ? <ProfilePageSkeleton/> :
-                                <>
-                                    <CardUser name={data.name} lastName={data.lastName} status={data.status}/>
-                                    <Paper variant={"outlined"} elevation={0}
-                                           sx={{
-                                               width: "100%",
-                                               minHeight: "982px",
-                                               borderRadius: "4px",
-                                               padding: "10px 36px 40px",
-                                           }}>
-                                        <TabsComponent/>
-                                        <Outlet/>
-                                    </Paper>
-                                </>
-                            }
-                        </Box>
-                    </>
-                )}
+            <Typography variant="h4" mb="20px">Мой профиль</Typography>
+            <Box display="flex" gap="20px">
+                <CardUser name={data.name} lastName={data.lastName} status={data.status}/>
+                <Paper variant="outlined" elevation={0} sx={{
+                    width: "100%",
+                    minHeight: "982px",
+                    borderRadius: "4px",
+                    padding: "10px 36px 40px",
+                }}>
+                    <TabsComponent/>
+                    <Outlet context={{data}}/>
+                </Paper>
+            </Box>
         </Box>
     );
 };
-

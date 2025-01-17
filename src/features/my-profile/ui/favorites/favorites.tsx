@@ -73,8 +73,8 @@ export const Favorites = () => {
                 <ToggleButtonsGroup alignment={alignment} onAlignmentChange={handleAlignmentChange}/>
             </Box>
             {!favoritesHelps &&
-                <NotFoundResult title={"Ошибка! Не удалось загрузить запросы"} img={"infoNotImage"} color={"red"}/>}
-            {favoriteRequests.length < 1 && <NotFoundResult title={"Запросы не найдены"} img={"resultNotImage"}/>}
+                <NotFoundResult title="Ошибка! Не удалось загрузить запросы" img="infoNotImage" color="red"/>}
+            {favoriteRequests.length < 1 && <NotFoundResult title="Запросы не найдены" img="resultNotImage"/>}
             {alignment === "left" && <CardsRequest data={currentItems} favoriteHelps={favoritesHelps}/>}
             {alignment === "center" && <CardsListItemRequest data={currentItems} favoriteHelps={favoritesHelps}/>}
             {alignment === "right" && <CardMap/>}

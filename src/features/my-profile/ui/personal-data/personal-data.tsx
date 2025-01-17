@@ -4,7 +4,6 @@ import {formatDate, InfoRow} from "@/shared";
 import {useOutletContext} from "react-router";
 
 export const PersonalData = () => {
-
     const {data} = useOutletContext<{ data: UserType }>();
 
     return (

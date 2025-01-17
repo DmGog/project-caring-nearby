@@ -11,9 +11,10 @@ const socialNetworks = [
     {key: "whatsapp", label: "WhatsApp", icon: WhatsappIcon}
 ];
 export const Contacts = () => {
-
     const {data} = useOutletContext<{ data: UserType }>();
+
     const {email, phone, social} = data.contacts;
+
     return (
         <Box pt="30px">
             <Typography variant="h6" mb="10px">E-mail</Typography>

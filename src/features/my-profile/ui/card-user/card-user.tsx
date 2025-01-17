@@ -9,6 +9,7 @@ type Props = {
 }
 export const CardUser = ({status, name, lastName}: Props) => {
     const handleLogOut = useLogout()
+
     return (
         <Box>
             <CardMedia component={"img"} src={ProfileDefaultImage} alt={"profile image"} sx={{

@@ -2,40 +2,28 @@ import {
     CardMap,
     HelpRequest,
     HelpRequests,
+    ProfilePageSkeleton,
     useHelpRequestsQuery,
-    useUserHelpRequestsQuery
+    useUserHelpFavoritesRequestsQuery,
 } from "@/features";
-import {AlignmentType, NotFoundResult, ToggleButtonsGroup} from "@/shared";
+import {NotFoundResult, ToggleButtonsGroup, usePaginationAndAlignment} from "@/shared";
 import {CardsListItemRequest, CardsRequest} from "@/widgets";
 import {Box, Pagination} from "@mui/material";
-import {useEffect, useState} from "react";
-import {useSearchParams} from "react-router-dom";
 
 
 export const Favorites = () => {
     const {data: helpRequests} = useHelpRequestsQuery();
-    const {data: favoritesHelps, isLoading} = useUserHelpRequestsQuery();
-    const [currentPage, setCurrentPage] = useState(1);
+    const {data: favoritesHelps, isLoading} = useUserHelpFavoritesRequestsQuery();
 
-    const [searchParams, setSearchParams] = useSearchParams();
-    const initialAlignment = (searchParams.get("view") as AlignmentType) || "left";
-    const [alignment, setAlignment] = useState<AlignmentType>(initialAlignment);
-    const handleAlignmentChange = (newAlignment: AlignmentType) => {
-        setAlignment(newAlignment);
-        setSearchParams(params => {
-            params.set("view", newAlignment);
-            return params;
-        });
-    };
-
-    useEffect(() => {
-        if (!searchParams.has("view")) {
-            setSearchParams(params => {
-                params.set("view", "left");
-                return params;
-            });
-        }
-    })
+    const {
+        currentPage,
+        totalPages,
+        alignment,
+        indexOfFirstItem,
+        indexOfLastItem,
+        handleAlignmentChange,
+        setCurrentPage
+    } = usePaginationAndAlignment(favoritesHelps?.length ?? 0);
 
     if (!helpRequests) {
         return <NotFoundResult title={"Ошибка! Не удалось загрузить запросы"} img={"infoNotImage"} color={"red"}/>;
@@ -44,20 +32,14 @@ export const Favorites = () => {
     }
 
     const favoriteRequests: HelpRequests = favoritesHelps
-        ? helpRequests.filter((request: HelpRequest) =>
-            favoritesHelps.includes(request.id)
-        )
+        ? helpRequests.filter((request: HelpRequest) => favoritesHelps.includes(request.id))
         : [];
 
-    const itemsPerPage = 3;
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = favoriteRequests.slice(indexOfFirstItem, indexOfLastItem);
-    const handlePageChange = (value: number) => {
-        setCurrentPage(value);
-    };
 
-    if (!favoritesHelps) return null;
+    if (isLoading) {
+        return <ProfilePageSkeleton/>
+    }
 
     return (
         <Box
@@ -70,23 +52,22 @@ export const Favorites = () => {
                 minHeight: "973px",
                 justifyContent: "space-between"
             }}>
-            <Box  position="absolute" top="-40px" right="0px">
+            <Box position="absolute" top="-40px" right="0px">
                 <ToggleButtonsGroup alignment={alignment} onAlignmentChange={handleAlignmentChange}/>
             </Box>
             {!favoritesHelps &&
-                <NotFoundResult title={"Ошибка! Не удалось загрузить запросы"} img={"infoNotImage"} color={"red"}/>}
-            {favoriteRequests.length < 1 && <NotFoundResult title={"Запросы не найдены"} img={"resultNotImage"}/>}
-            {alignment === "left" && <CardsRequest data={currentItems} favoriteHelps={favoritesHelps}/>}
-            {alignment === "center" && <CardsListItemRequest data={currentItems} favoriteHelps={favoritesHelps}/>}
+                <NotFoundResult title="Ошибка! Не удалось загрузить запросы" img="infoNotImage" color="red"/>}
+            {favoriteRequests.length < 1 && <NotFoundResult title="Запросы не найдены" img="resultNotImage"/>}
+            {alignment === "left" && <CardsRequest data={currentItems} favoriteHelps={favoritesHelps ?? []}/>}
+            {alignment === "center" && <CardsListItemRequest data={currentItems} favoriteHelps={favoritesHelps ?? []}/>}
             {alignment === "right" && <CardMap/>}
             <Pagination
-                disabled={isLoading}
                 sx={{
                     pt: "30px"
                 }}
-                count={Math.ceil((favoriteRequests.length) / itemsPerPage)}
+                count={totalPages}
                 page={currentPage}
-                onChange={(_, value) => handlePageChange(value)}
+                onChange={(_, value) => setCurrentPage(value)}
                 color="primary"
             />
         </Box>

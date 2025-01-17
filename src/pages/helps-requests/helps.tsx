@@ -1,6 +1,6 @@
 import {Box, Pagination, Paper, Typography} from "@mui/material";
 import {CardsListItemRequest, CardsRequest, FilterController} from "@/widgets";
-import {CardMap, useHelpRequestsQuery, useUserHelpRequestsQuery} from "@/features";
+import {CardMap, useHelpRequestsQuery, useUserHelpFavoritesRequestsQuery} from "@/features";
 import {AlignmentType, NotFoundResult, SearchInput, ToggleButtonsGroup} from "@/shared";
 import {useEffect, useState} from "react";
 import {useSearchParams} from "react-router-dom";
@@ -9,7 +9,7 @@ import dayjs, {Dayjs} from "dayjs";
 
 export const Helps = () => {
     const {data} = useHelpRequestsQuery();
-    const {data: favoritesHelps} = useUserHelpRequestsQuery();
+    const {data: favoritesHelps} = useUserHelpFavoritesRequestsQuery();
     const [searchParams, setSearchParams] = useSearchParams();
     const initialAlignment = (searchParams.get("view") as AlignmentType) || "left";
     const [alignment, setAlignment] = useState<AlignmentType>(initialAlignment);

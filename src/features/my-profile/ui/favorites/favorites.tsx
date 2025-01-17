@@ -12,7 +12,7 @@ import {Box, Pagination} from "@mui/material";
 
 
 export const Favorites = () => {
-    const {data: helpRequests} = useHelpRequestsQuery();
+    const {data: helpRequests, isLoading: isLoadingRequests} = useHelpRequestsQuery();
     const {data: favoritesHelps, isLoading} = useUserHelpFavoritesRequestsQuery();
 
     const {
@@ -25,6 +25,10 @@ export const Favorites = () => {
         setCurrentPage
     } = usePaginationAndAlignment(favoritesHelps?.length ?? 0);
 
+    if (isLoading || isLoadingRequests) {
+        return <ProfilePageSkeleton/>
+    }
+
     if (!helpRequests) {
         return <NotFoundResult title={"Ошибка! Не удалось загрузить запросы"} img={"infoNotImage"} color={"red"}/>;
     } else if (helpRequests.length < 1) {
@@ -36,10 +40,6 @@ export const Favorites = () => {
         : [];
 
     const currentItems = favoriteRequests.slice(indexOfFirstItem, indexOfLastItem);
-
-    if (isLoading) {
-        return <ProfilePageSkeleton/>
-    }
 
     return (
         <Box

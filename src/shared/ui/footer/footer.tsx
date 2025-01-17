@@ -1,6 +1,4 @@
-import {Link} from "react-router-dom";
-import {Box, Paper} from "@mui/material";
-import s from "./footer.module.scss"
+import {Box, Link, Paper} from "@mui/material";
 
 export const Footer = () => {
     return (
@@ -13,12 +11,23 @@ export const Footer = () => {
             backgroundColor: "#fff",
             boxShadow: " 0 0 0 1px #e0e0e0"
         }}>
-            <Box display="flex" justifyContent="space-between" maxWidth="1548px" width="100%" padding="0 24px">
-                <Link className={s.link} to={"#"}>Об ивенте</Link>
-                <Link className={s.link} to={"#"}>Github проекта</Link>
-                <Link className={s.link} to={"#"}>мой telegram</Link>
+            <Box display="flex" justifyContent="space-around" maxWidth="1548px" width="100%" padding="0 24px">
+                <Link href="https://github.com/DmGog/project-caring-nearby"
+                      target="_blank"
+                      rel="noopener noreferrer" sx={styles}>Github проекта</Link>
+                <Link href="https://t.me/DmGog_37"
+                      target="_blank"
+                      rel="noopener noreferrer" sx={styles}>Мой Telegram</Link>
             </Box>
         </Paper>
     );
 };
 
+const styles = {
+    textDecoration: "none",
+    color: "inherit",
+    cursor: "pointer",
+    ":hover": {
+        color: "#1976d2"
+    }
+}

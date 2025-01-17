@@ -1,4 +1,3 @@
-import s from "./header.module.scss"
 import LogoIcon from "@/shared/assets/icons/Logo.svg"
 import {Link} from "react-router-dom";
 import {PATH} from "@/app/router";
@@ -8,6 +7,7 @@ import {PopoverProfile, useLogout} from "@/shared";
 import {MouseEvent, useState} from "react";
 import {useNavigate} from "react-router";
 import AvatarIcon from "@/shared/assets/icons/avatar.svg"
+import s from "./header.module.scss"
 
 
 export const Header = () => {
@@ -78,5 +78,4 @@ export const Header = () => {
         </AppBar>
     )
 }
-
 

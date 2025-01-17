@@ -7,7 +7,7 @@ export const profileApi = baseApi.injectEndpoints({
             query: () => "user",
             providesTags: ["UserProfile"],
         }),
-        userHelpRequests: builder.query<string[], void>({
+        userHelpFavoritesRequests: builder.query<string[], void>({
             query: () => "user/favourites",
             providesTags: ["Favourites"],
         }),
@@ -31,7 +31,7 @@ export const profileApi = baseApi.injectEndpoints({
 
 export const {
     useUserProfileQuery,
-    useUserHelpRequestsQuery,
+    useUserHelpFavoritesRequestsQuery,
     useAddHelpRequestFavouritesMutation,
     useRemoveHelpRequestFavouritesMutation,
 } = profileApi;

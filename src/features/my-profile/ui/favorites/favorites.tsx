@@ -2,8 +2,7 @@ import {
     CardMap,
     HelpRequest,
     HelpRequests,
-    useHelpRequestsQuery,
-    useUserHelpRequestsQuery
+    useHelpRequestsQuery, useUserHelpFavoritesRequestsQuery,
 } from "@/features";
 import {AlignmentType, NotFoundResult, ToggleButtonsGroup} from "@/shared";
 import {CardsListItemRequest, CardsRequest} from "@/widgets";
@@ -14,7 +13,7 @@ import {useSearchParams} from "react-router-dom";
 
 export const Favorites = () => {
     const {data: helpRequests} = useHelpRequestsQuery();
-    const {data: favoritesHelps, isLoading} = useUserHelpRequestsQuery();
+    const {data: favoritesHelps, isLoading} = useUserHelpFavoritesRequestsQuery();
     const [currentPage, setCurrentPage] = useState(1);
 
     const [searchParams, setSearchParams] = useSearchParams();

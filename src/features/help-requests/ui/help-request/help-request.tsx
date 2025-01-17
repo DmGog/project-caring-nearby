@@ -1,4 +1,4 @@
-import {useHelpRequest, useHelpRequestByIdQuery, useUserHelpRequestsQuery} from "@/features";
+import {useHelpRequest, useHelpRequestByIdQuery, useUserHelpFavoritesRequestsQuery} from "@/features";
 import {Box, Button, Card, CardContent, LinearProgress, List, ListItem, Paper, Typography} from "@mui/material";
 import {CheckCircleOutlined, ErrorOutline, VerifiedRounded, StarBorder, Star} from "@mui/icons-material";
 import {formatDate, formatNumber, InfoRow, NotFoundResult, removeBrackets} from "@/shared";
@@ -7,7 +7,7 @@ import {useParams} from "react-router";
 export const Help = () => {
     const {id} = useParams()
     const {data: helpRequest} = useHelpRequestByIdQuery(id ?? "");
-    const {data: userFavoriteHelps} = useUserHelpRequestsQuery();
+    const {data: userFavoriteHelps} = useUserHelpFavoritesRequestsQuery();
     const {handleAddContribute, handleAddFavorite, handleRemoveFavorite} = useHelpRequest()
     if ( !helpRequest) {
         return <NotFoundResult img={"infoNotImage"} title={"Ошибка! Не удалось загрузить информацию"} color={"red"}/>

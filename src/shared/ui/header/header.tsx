@@ -4,15 +4,15 @@ import {Link} from "react-router-dom";
 import {PATH} from "@/app/router";
 import {AppBar, Box, Button, Toolbar} from "@mui/material";
 import {ChevronRight} from "@mui/icons-material";
-import {PopoverProfile} from "@/shared";
-import {useState, MouseEvent} from "react";
+import {PopoverProfile, useLogout} from "@/shared";
+import {MouseEvent, useState} from "react";
 import {useNavigate} from "react-router";
 import AvatarIcon from "@/shared/assets/icons/avatar.svg"
-import {baseApi} from "@/app";
 
 
 export const Header = () => {
     const isAuth = localStorage.getItem("auth")
+    const logout = useLogout();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const navigate = useNavigate();
     const handleClickAvatar = (event: MouseEvent<HTMLElement>) => {
@@ -28,9 +28,7 @@ export const Header = () => {
     }
 
     const handleClickExit = () => {
-        localStorage.clear()
-        baseApi.util.resetApiState()
-        navigate(PATH.LOGIN_PAGE);
+        logout()
         handleClosePopover();
     }
     return (

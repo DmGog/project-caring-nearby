@@ -10,10 +10,8 @@ export const PersonalData = () => {
     return (
         <Box paddingTop="30px">
             <Typography variant="h6" mb="10px">Профиль</Typography>
-            <Box mb={"30px"}>
-                <InfoRow label="Фамилия" value={data.lastName}/>
-                <InfoRow label="Имя" value={data.name}/>
-            </Box>
+            <InfoRow label="Фамилия" value={data.lastName}/>
+            <InfoRow label="Имя" value={data.name} marginBottom="30px"/>
             <Typography variant="h6" mb="10px">Дата Рождения</Typography>
             <Typography variant="body2" mb="30px">{formatDate(data.birthdate)}</Typography>
             <Typography variant="h6" mb="10px">Локация для помощи</Typography>

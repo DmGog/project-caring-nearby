@@ -1,9 +1,8 @@
-import {Box, Card, CardContent, CardMedia, Divider, IconButton, Typography} from "@mui/material";
+import {Box, Card, CardContent, CardMedia, Divider, Typography} from "@mui/material";
 import CardFinanceImage from "@/shared/assets/images/card-finance.png";
 import CardMaterialImage from "@/shared/assets/images/card-material.png";
 import CardOrganizationImage from "@/shared/assets/images/card-organization.png";
-import {Star, StarBorder} from "@mui/icons-material";
-import {formatDate, removeBrackets, RequestProgress} from "@/shared";
+import {FavoriteButton, formatDate, removeBrackets, RequestProgress} from "@/shared";
 import {useHelpRequest} from "@/features";
 
 
@@ -38,7 +37,12 @@ export const CardRequest = ({
                                 id, isFavorite
                             }: Props) => {
 
-    const {handleAddFavorite, handleRemoveFavorite, handleHelpClick, handleNavigateRequestHelp, isDisabledContribute} = useHelpRequest()
+    const {
+        handleFavoriteClick,
+        isDisabled,
+        handleHelpClick,
+        handleNavigateRequestHelp,
+    } = useHelpRequest(isFavorite)
 
     let cardImage;
     if (helpType === "finance" && requesterType === "person") {
@@ -73,19 +77,7 @@ export const CardRequest = ({
                     <Typography variant={"h5"}>
                         {removeBrackets(titleCard)}
                     </Typography>
-                    <IconButton
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            (isFavorite ? handleRemoveFavorite(id) : handleAddFavorite(id))
-                        }}
-                        sx={{
-                            marginLeft: "10px",
-                            border: "1px solid rgba(0, 0, 0, 0.12)",
-                            borderRadius: "4px",
-                        }}
-                    >
-                        {isFavorite ? <Star/> : <StarBorder/>}
-                    </IconButton>
+                    <FavoriteButton isFavorite={isFavorite} onClick={handleFavoriteClick(id)} disabled={isDisabled}/>
                 </Box>
             </Box>
             <Box>
@@ -111,7 +103,8 @@ export const CardRequest = ({
                     <Typography variant="subtitle2" mb="4px">Завершение</Typography>
                     <Typography variant="body2" mb="20px">{formatDate(dateClose)}</Typography>
                     <RequestProgress requestGoal={requestGoal} requestGoalCurrentValue={requestGoalCurrentValue}
-                                     contributorsCount={contributorsCount} onHelpClick={handleHelpClick(id)} disabled={isDisabledContribute}/>
+                                     contributorsCount={contributorsCount} onHelpClick={handleHelpClick(id)}
+                                     disabled={isDisabled}/>
                 </CardContent>
             </Box>
         </Card>

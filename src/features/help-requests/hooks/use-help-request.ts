@@ -9,12 +9,13 @@ import {PATH} from "@/app/router";
 import {isFetchBaseQueryError} from "@/shared";
 import {MouseEvent, useState} from "react";
 
-export const useHelpRequest = () => {
+export const useHelpRequest = (isFavorite: boolean) => {
     const [addFavorite] = useAddHelpRequestFavouritesMutation();
     const [removeFavorite] = useRemoveHelpRequestFavouritesMutation();
     const [addContribute] = useContributeMutation()
     const navigate = useNavigate()
     const [isDisabledContribute, setIsDisabledContribute] = useState(false)
+    const [isDisabledFavorite, setIsDisabledFavorite] = useState(false)
     const handleNavigateRequestHelp = (id: string) => {
         navigate(PATH.REQUEST_HELP.replace(":id", id))
     }
@@ -35,6 +36,7 @@ export const useHelpRequest = () => {
         }
     }
     const handleFavoriteAction = async (id: string, action: "add" | "remove") => {
+        setIsDisabledFavorite(true)
         try {
             const response = action === "add"
                 ? await addFavorite({requestId: id})
@@ -47,6 +49,8 @@ export const useHelpRequest = () => {
             }
         } catch {
             toast.error("Ошибка! Попробуйте еще раз");
+        } finally {
+            setIsDisabledFavorite(false)
         }
     };
 
@@ -55,11 +59,16 @@ export const useHelpRequest = () => {
         e.stopPropagation();
     };
 
+    const handleFavoriteClick = (id: string) => (e: MouseEvent) => {
+        e.stopPropagation();
+        (isFavorite ? handleFavoriteAction(id, "remove") : handleFavoriteAction(id, "add"))
+    }
+
+    const isDisabled = isDisabledFavorite || isDisabledContribute
     return {
-        isDisabledContribute,
+        isDisabled,
         handleHelpClick,
         handleNavigateRequestHelp,
-        handleAddFavorite: (id: string) => handleFavoriteAction(id, "add"),
-        handleRemoveFavorite: (id: string) => handleFavoriteAction(id, "remove")
+        handleFavoriteClick
     };
 };

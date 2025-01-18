@@ -1,6 +1,5 @@
-import {Box, Button, ListItem, Stack, Typography} from "@mui/material";
-import {formatDate, removeBrackets, RequestProgress} from "@/shared";
-import {Star, StarBorder} from "@mui/icons-material";
+import {Box, ListItem, Stack, Typography} from "@mui/material";
+import {FavoriteButton, formatDate, removeBrackets, RequestProgress} from "@/shared";
 import {useHelpRequest} from "@/features";
 
 
@@ -32,7 +31,7 @@ export const CardListItemRequest = ({
                                         isFavorite,
                                         id
                                     }: Props) => {
-    const {handleRemoveFavorite, handleAddFavorite, handleHelpClick, handleNavigateRequestHelp, isDisabledContribute} = useHelpRequest()
+    const {handleHelpClick, handleNavigateRequestHelp, handleFavoriteClick, isDisabled} = useHelpRequest(isFavorite)
     return (
         <ListItem sx={{
             width: "1008px",
@@ -50,7 +49,8 @@ export const CardListItemRequest = ({
                         {removeBrackets(titleCard)}
                     </Typography>
                     <RequestProgress requestGoal={requestGoal} requestGoalCurrentValue={requestGoalCurrentValue}
-                                     contributorsCount={contributorsCount} onHelpClick={handleHelpClick(id)} disabled={isDisabledContribute}/>
+                                     contributorsCount={contributorsCount} onHelpClick={handleHelpClick(id)}
+                                     disabled={isDisabled}/>
                 </Stack>
 
                 <Stack gap="30px" sx={{width: "25%"}}>
@@ -93,20 +93,8 @@ export const CardListItemRequest = ({
                         </Typography>
                     </Box>
                 </Stack>
-                <Button onClick={(e) => {
-                    e.stopPropagation();
-                    (isFavorite ? handleRemoveFavorite(id) : handleAddFavorite(id))
-                }} size="small"
-                        color="inherit"
-                        variant="outlined" startIcon={isFavorite ? <Star/> : <StarBorder/>}
-                        sx={{
-                            height: "28px",
-                            textTransform: "none",
-                            border: "1px solid rgba(0, 0, 0, 0.12)",
-                            padding: "4px 10px",
-                        }}>
-                    {isFavorite ? "Удалить из избранное" : "Добавить в избранное"}
-                </Button>
+                <FavoriteButton isFavorite={isFavorite} onClick={handleFavoriteClick(id)} disabled={isDisabled}
+                                titleButton/>
             </Stack>
         </ListItem>
     );

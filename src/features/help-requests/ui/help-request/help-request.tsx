@@ -1,7 +1,7 @@
 import {useHelpRequest, useHelpRequestByIdQuery, useUserHelpFavoritesRequestsQuery} from "@/features";
-import {Box, Button, Card, CardContent, List, ListItem, Paper, Typography} from "@mui/material";
-import {CheckCircleOutlined, ErrorOutline, Star, StarBorder, VerifiedRounded} from "@mui/icons-material";
-import {formatDate, InfoRow, NotFoundResult, removeBrackets, RequestProgress} from "@/shared";
+import {Box, Card, CardContent, List, ListItem, Paper, Typography} from "@mui/material";
+import {CheckCircleOutlined, ErrorOutline, VerifiedRounded} from "@mui/icons-material";
+import {FavoriteButton, formatDate, InfoRow, NotFoundResult, removeBrackets, RequestProgress} from "@/shared";
 import {useParams} from "react-router";
 import {HelpPageSkeleton} from "../help-page-skeleton";
 
@@ -9,21 +9,23 @@ export const Help = () => {
     const {id} = useParams()
     const {data: helpRequest, isLoading: isLoadingHelpRequest} = useHelpRequestByIdQuery(id ?? "");
     const {data: userFavoriteHelps, isLoading: isLoadingFavoriteHelps} = useUserHelpFavoritesRequestsQuery();
-    const {handleHelpClick, handleAddFavorite, handleRemoveFavorite, isDisabledContribute} = useHelpRequest()
 
-    const isDisabled = isLoadingHelpRequest || isLoadingFavoriteHelps
+    let isFavorite = false
+    if (userFavoriteHelps && id) {
+        isFavorite = userFavoriteHelps.includes(id)
+    }
+    const {handleHelpClick, handleFavoriteClick, isDisabled} = useHelpRequest(isFavorite)
 
-    if (isDisabled) {
+    const isDisabledData = isLoadingHelpRequest || isLoadingFavoriteHelps
+
+    if (isDisabledData) {
         return <HelpPageSkeleton/>
     }
 
     if (!helpRequest) {
         return <NotFoundResult img={"infoNotImage"} title={"Ошибка! Не удалось загрузить информацию"} color={"red"}/>
     }
-    let isFavorite = false
-    if (userFavoriteHelps && id) {
-        isFavorite = userFavoriteHelps.includes(id)
-    }
+
     return (
         <Box display="flex" alignItems="flex-start" justifyContent="space-between">
             <Paper variant="outlined" elevation={0} sx={{
@@ -108,20 +110,8 @@ export const Help = () => {
                     </Box>
 
                 </Box>
-                <Button disabled={isDisabled} onClick={(e) => {
-                    e.stopPropagation();
-                    (isFavorite ? handleRemoveFavorite(helpRequest.id) : handleAddFavorite(helpRequest.id))
-                }} size="small"
-                        color="inherit"
-                        variant="outlined" startIcon={isFavorite ? <Star/> : <StarBorder/>}
-                        sx={{
-                            height: "28px",
-                            textTransform: "none",
-                            border: "1px solid rgba(0, 0, 0, 0.12)",
-                            padding: "4px 10px",
-                        }}>
-                    {isFavorite ? "Удалить из избранное" : "Добавить в избранное"}
-                </Button>
+                <FavoriteButton isFavorite={isFavorite} onClick={handleFavoriteClick(helpRequest.id)}
+                                disabled={isDisabled} titleButton/>
             </Paper>
             <Card sx={{
                 width: "320px",
@@ -143,7 +133,8 @@ export const Help = () => {
                     <RequestProgress requestGoal={helpRequest.requestGoal}
                                      requestGoalCurrentValue={helpRequest.requestGoalCurrentValue}
                                      contributorsCount={helpRequest.contributorsCount}
-                                     onHelpClick={handleHelpClick(helpRequest.id)} marginBottom="40px" disabled={isDisabledContribute}/>
+                                     onHelpClick={handleHelpClick(helpRequest.id)} marginBottom="40px"
+                                     disabled={isDisabled}/>
                 </CardContent>
             </Card>
         </Box>

@@ -7,7 +7,7 @@ type Props = {
     requestGoalCurrentValue: number;
     contributorsCount: number;
     onHelpClick: (e: MouseEvent) => void
-    disabled?: boolean
+    disabled: boolean
     marginBottom?: string
 }
 

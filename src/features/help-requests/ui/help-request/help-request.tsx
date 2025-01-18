@@ -26,6 +26,11 @@ export const Help = () => {
         return <NotFoundResult img={"infoNotImage"} title={"Ошибка! Не удалось загрузить информацию"} color={"red"}/>
     }
 
+    const isVerified = helpRequest.organization.isVerified;
+    const icon = isVerified ? <VerifiedRounded sx={{color: "#1E88E5"}}/> : <ErrorOutline sx={{color: "#FF0000"}}/>;
+    const text = isVerified ? "Организация проверена" : "Организация не проверена";
+    const textColor = isVerified ? "inherit" : "red";
+
     return (
         <Box display="flex" alignItems="flex-start" justifyContent="space-between">
             <Paper variant="outlined" elevation={0} sx={{
@@ -44,21 +49,10 @@ export const Help = () => {
                     <Typography variant="h6" mb="10px">Организация</Typography>
                     <Typography variant="body2" mb="4px">{helpRequest.organization.title}</Typography>
                     <Box display="flex" justifyContent="flex-start" alignItems="end" gap="4px" mb="30px">
-                        {helpRequest.organization.isVerified ?
-                            (
-                                <>
-                                    <VerifiedRounded sx={{color: "#1E88E5",}}/>
-                                    <Typography variant="caption">Организация проверена</Typography>
-                                </>
-                            )
-                            :
-                            (
-                                <>
-                                    <ErrorOutline sx={{color: "red"}}/>
-                                    <Typography variant="caption" color="red">Организация не проверена</Typography>
-                                </>
-                            )
-                        }
+                        {icon}
+                        <Typography variant="caption" color={textColor}>
+                            {text}
+                        </Typography>
                     </Box>
                     <Typography variant="h6" mb="10px">Кому мы помогаем</Typography>
                     <Typography variant="body2" mb="30px">

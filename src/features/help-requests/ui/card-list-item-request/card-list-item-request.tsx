@@ -52,7 +52,6 @@ export const CardListItemRequest = ({
                                      contributorsCount={contributorsCount} onHelpClick={handleHelpClick(id)}
                                      disabled={isDisabled}/>
                 </Stack>
-
                 <Stack gap="30px" sx={{width: "25%"}}>
                     <Box>
                         <Typography variant="subtitle2">

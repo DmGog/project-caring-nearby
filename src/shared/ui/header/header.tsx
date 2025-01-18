@@ -42,11 +42,11 @@ export const Header = () => {
                 maxWidth: "1548px",
                 justifyContent: "space-between"
             }}>
-                <Link to={PATH.HELPS_PAGE}>
+                <Link to={isAuth ? PATH.HELPS_PAGE : "#"} onClick={(e) => !isAuth && e.preventDefault()}>
                     <LogoIcon/>
                 </Link>
                 <Box display="flex" width="100%" maxWidth="824px" alignItems="center" justifyContent="space-between">
-                    <StyledLink to={PATH.HELPS_PAGE}>
+                    <StyledLink to={isAuth ? PATH.HELPS_PAGE : "#"} onClick={(e) => !isAuth && e.preventDefault()}>
                         Запросы о помощи
                     </StyledLink>
                     {!isAuth ? (

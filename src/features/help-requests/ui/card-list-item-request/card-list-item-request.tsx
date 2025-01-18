@@ -1,5 +1,5 @@
-import {Box, Button, LinearProgress, ListItem, Stack, Typography} from "@mui/material";
-import {formatDate, formatNumber, removeBrackets} from "@/shared";
+import {Box, Button, ListItem, Stack, Typography} from "@mui/material";
+import {formatDate, removeBrackets, RequestProgress} from "@/shared";
 import {Star, StarBorder} from "@mui/icons-material";
 import {useHelpRequest} from "@/features";
 
@@ -32,7 +32,7 @@ export const CardListItemRequest = ({
                                         isFavorite,
                                         id
                                     }: Props) => {
-    const {handleRemoveFavorite, handleAddFavorite, handleAddContribute, handleNavigateRequestHelp} = useHelpRequest()
+    const {handleRemoveFavorite, handleAddFavorite, handleHelpClick, handleNavigateRequestHelp, isDisabledContribute} = useHelpRequest()
     return (
         <ListItem sx={{
             width: "1008px",
@@ -49,29 +49,8 @@ export const CardListItemRequest = ({
                     <Typography variant="h5" mb="30px">
                         {removeBrackets(titleCard)}
                     </Typography>
-                    <Box sx={{display: "flex", flexDirection: "column", width: "100%"}}>
-                        <Typography variant="subtitle2" mb="4px">
-                            Мы собрали
-                        </Typography>
-                        <LinearProgress sx={{
-                            mb: "4px"
-                        }} variant="determinate"
-                                        value={Math.min((requestGoalCurrentValue / requestGoal) * 100, 100)}/>
-                        <Box sx={{display: "flex", justifyContent: "space-between", mb: "20px"}}>
-                            <Typography variant="body2" color="textSecondary">
-                                {formatNumber(requestGoalCurrentValue)} руб
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                                {formatNumber(requestGoal)} руб
-                            </Typography>
-                        </Box>
-                        <Typography variant="body2" mb="10px" color="textSecondary">Нас
-                            уже: {formatNumber(contributorsCount)}</Typography>
-                        <Button onClick={(e) => {
-                            e.stopPropagation();
-                            handleAddContribute(id)
-                        }} variant="contained" fullWidth>Помочь</Button>
-                    </Box>
+                    <RequestProgress requestGoal={requestGoal} requestGoalCurrentValue={requestGoalCurrentValue}
+                                     contributorsCount={contributorsCount} onHelpClick={handleHelpClick(id)} disabled={isDisabledContribute}/>
                 </Stack>
 
                 <Stack gap="30px" sx={{width: "25%"}}>

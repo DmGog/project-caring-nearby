@@ -1,19 +1,9 @@
-import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    CardMedia,
-    Divider,
-    IconButton,
-    LinearProgress,
-    Typography
-} from "@mui/material";
+import {Box, Card, CardContent, CardMedia, Divider, IconButton, Typography} from "@mui/material";
 import CardFinanceImage from "@/shared/assets/images/card-finance.png";
 import CardMaterialImage from "@/shared/assets/images/card-material.png";
 import CardOrganizationImage from "@/shared/assets/images/card-organization.png";
 import {Star, StarBorder} from "@mui/icons-material";
-import {formatDate, formatNumber, removeBrackets} from "@/shared";
+import {formatDate, removeBrackets, RequestProgress} from "@/shared";
 import {useHelpRequest} from "@/features";
 
 
@@ -48,7 +38,7 @@ export const CardRequest = ({
                                 id, isFavorite
                             }: Props) => {
 
-    const {handleAddFavorite, handleRemoveFavorite, handleAddContribute, handleNavigateRequestHelp} = useHelpRequest()
+    const {handleAddFavorite, handleRemoveFavorite, handleHelpClick, handleNavigateRequestHelp, isDisabledContribute} = useHelpRequest()
 
     let cardImage;
     if (helpType === "finance" && requesterType === "person") {
@@ -59,6 +49,7 @@ export const CardRequest = ({
     if (requesterType === "organization") {
         cardImage = CardOrganizationImage;
     }
+
 
     return (
         <Card onClick={() => handleNavigateRequestHelp(id)} sx={{
@@ -119,25 +110,8 @@ export const CardRequest = ({
                     }}>{descriptionHelpRequest}</Typography>
                     <Typography variant="subtitle2" mb="4px">Завершение</Typography>
                     <Typography variant="body2" mb="20px">{formatDate(dateClose)}</Typography>
-                    <Typography variant="subtitle2" mb="4px">Мы собрали</Typography>
-                    <LinearProgress variant="determinate"
-                                    value={Math.min((requestGoalCurrentValue / requestGoal) * 100, 100)} sx={{
-                        mb: "4px"
-                    }}/>
-                    <Box display="flex" alignItems="center" justifyContent="space-between" width="100%"
-                         mb="20px">
-                        <Typography variant="body2"
-                                    color="textSecondary">{formatNumber(requestGoalCurrentValue)} руб</Typography>
-                        <Typography variant="body2" color="textSecondary">{formatNumber(requestGoal)} руб</Typography>
-                    </Box>
-                    <Typography variant="body2" mb="10px" color="textSecondary">Нас
-                        уже: {formatNumber(contributorsCount)}</Typography>
-                    <Button onClick={(e) => {
-                        handleAddContribute(id);
-                        e.stopPropagation();
-                    }} size="large" color="primary"
-                            variant="contained"
-                            fullWidth>Помочь</Button>
+                    <RequestProgress requestGoal={requestGoal} requestGoalCurrentValue={requestGoalCurrentValue}
+                                     contributorsCount={contributorsCount} onHelpClick={handleHelpClick(id)} disabled={isDisabledContribute}/>
                 </CardContent>
             </Box>
         </Card>

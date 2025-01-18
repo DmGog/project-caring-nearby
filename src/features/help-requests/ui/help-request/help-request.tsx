@@ -1,7 +1,7 @@
 import {useHelpRequest, useHelpRequestByIdQuery, useUserHelpFavoritesRequestsQuery} from "@/features";
-import {Box, Button, Card, CardContent, LinearProgress, List, ListItem, Paper, Typography} from "@mui/material";
+import {Box, Button, Card, CardContent, List, ListItem, Paper, Typography} from "@mui/material";
 import {CheckCircleOutlined, ErrorOutline, Star, StarBorder, VerifiedRounded} from "@mui/icons-material";
-import {formatDate, formatNumber, InfoRow, NotFoundResult, removeBrackets} from "@/shared";
+import {formatDate, InfoRow, NotFoundResult, removeBrackets, RequestProgress} from "@/shared";
 import {useParams} from "react-router";
 import {HelpPageSkeleton} from "../help-page-skeleton";
 
@@ -9,9 +9,11 @@ export const Help = () => {
     const {id} = useParams()
     const {data: helpRequest, isLoading: isLoadingHelpRequest} = useHelpRequestByIdQuery(id ?? "");
     const {data: userFavoriteHelps, isLoading: isLoadingFavoriteHelps} = useUserHelpFavoritesRequestsQuery();
-    const {handleAddContribute, handleAddFavorite, handleRemoveFavorite} = useHelpRequest()
+    const {handleHelpClick, handleAddFavorite, handleRemoveFavorite, isDisabledContribute} = useHelpRequest()
 
-    if (isLoadingHelpRequest || isLoadingFavoriteHelps) {
+    const isDisabled = isLoadingHelpRequest || isLoadingFavoriteHelps
+
+    if (isDisabled) {
         return <HelpPageSkeleton/>
     }
 
@@ -106,7 +108,7 @@ export const Help = () => {
                     </Box>
 
                 </Box>
-                <Button onClick={(e) => {
+                <Button disabled={isDisabled} onClick={(e) => {
                     e.stopPropagation();
                     (isFavorite ? handleRemoveFavorite(helpRequest.id) : handleAddFavorite(helpRequest.id))
                 }} size="small"
@@ -138,27 +140,10 @@ export const Help = () => {
                     </Typography>
                     <Typography variant="subtitle2" mb="4px">Завершение</Typography>
                     <Typography variant="body2" mb="20px">{formatDate(helpRequest.endingDate)}</Typography>
-                    <Box display="flex" flexDirection="column" width="100%">
-                        <Typography variant="subtitle2" mb="4px">
-                            Мы собрали
-                        </Typography>
-                        <LinearProgress sx={{
-                            mb: "4px"
-                        }} variant="determinate"
-                                        value={Math.min((helpRequest.requestGoalCurrentValue / helpRequest.requestGoal) * 100, 100)}/>
-                        <Box display="flex" justifyContent="space-between" mb="40px">
-                            <Typography variant="body2" color="textSecondary">
-                                {formatNumber(helpRequest.requestGoalCurrentValue)} руб
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                                {formatNumber(helpRequest.requestGoal)} руб
-                            </Typography>
-                        </Box>
-                        <Typography variant="body2" mb="10px" color="textSecondary">Нас
-                            уже: {formatNumber(helpRequest.contributorsCount)}</Typography>
-                        <Button variant="contained" fullWidth
-                                onClick={() => handleAddContribute(helpRequest.id)}>Помочь</Button>
-                    </Box>
+                    <RequestProgress requestGoal={helpRequest.requestGoal}
+                                     requestGoalCurrentValue={helpRequest.requestGoalCurrentValue}
+                                     contributorsCount={helpRequest.contributorsCount}
+                                     onHelpClick={handleHelpClick(helpRequest.id)} marginBottom="40px" disabled={isDisabledContribute}/>
                 </CardContent>
             </Card>
         </Box>

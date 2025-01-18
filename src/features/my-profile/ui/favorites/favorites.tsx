@@ -22,8 +22,10 @@ export const Favorites = () => {
 
     const currentItems = favoriteRequests.slice(indexOfFirstItem, indexOfLastItem);
 
-    if (isLoading || isLoadingRequests) {
-        return <Skeleton variant="rounded" width="1008px" height="853px"/>
+    const isDisabled = isLoading || isLoadingRequests
+
+    if (isDisabled) {
+        return <Skeleton variant="rounded" width="1008px" height="853px" sx={{pt: "20px"}}/>
     }
     return (
         <Box
@@ -47,6 +49,7 @@ export const Favorites = () => {
             {alignment === "right" && <CardMap/>}
             {favoriteRequests.length >= 1 &&
                 <Pagination
+                    disabled={isDisabled}
                     sx={{
                         pt: "30px"
                     }}

@@ -9,7 +9,7 @@ import dayjs, {Dayjs} from "dayjs";
 
 export const Helps = () => {
     const {data, isLoading: isLoadingHelpRequests} = useHelpRequestsQuery();
-    const {data: favoritesHelps, isLoading: isLoadingFavoritesHelps} = useUserHelpFavoritesRequestsQuery();
+    const {data: favoritesHelps} = useUserHelpFavoritesRequestsQuery();
     const [searchParams, setSearchParams] = useSearchParams();
     const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
     const [filteredData, setFilteredData] = useState(data || []);
@@ -89,11 +89,6 @@ export const Helps = () => {
     const handleDateChange = (date: Dayjs | null) => {
         setSelectedDate(date);
     };
-    useEffect(() => {
-        if (currentPage > totalPages) {
-            setCurrentPage(1);
-        }
-    }, [totalPages, currentPage]);
 
     const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
@@ -103,7 +98,7 @@ export const Helps = () => {
             width: "100%", backgroundColor: "#f5f5f5", padding: "30px 40px 64px"
         }}>
             <Typography variant="h4" mb="20px">Запросы о помощи</Typography>
-            {isLoadingHelpRequests || isLoadingFavoritesHelps ? <HelpsPageSkeleton/> : (
+            {isLoadingHelpRequests ? <HelpsPageSkeleton/> : (
                 <Box display="flex" gap="20px" width="100%">
                     <FilterController onFilterChange={handleFilterChange} selectedFilters={filters}
                                       selectedDate={selectedDate}

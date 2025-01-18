@@ -1,6 +1,6 @@
 import {useHelpRequest, useHelpRequestByIdQuery, useUserHelpFavoritesRequestsQuery} from "@/features";
 import {Box, Card, CardContent, List, ListItem, Paper, Typography} from "@mui/material";
-import {CheckCircleOutlined, ErrorOutline, VerifiedRounded} from "@mui/icons-material";
+import {AddTask, CheckCircleOutlined, ErrorOutline, VerifiedRounded} from "@mui/icons-material";
 import {FavoriteButton, formatDate, InfoRow, NotFoundResult, removeBrackets, RequestProgress} from "@/shared";
 import {useParams} from "react-router";
 import {HelpPageSkeleton} from "../help-page-skeleton";
@@ -14,7 +14,12 @@ export const Help = () => {
     if (userFavoriteHelps && id) {
         isFavorite = userFavoriteHelps.includes(id)
     }
-    const {handleHelpClick, handleFavoriteClick, isDisabled} = useHelpRequest(isFavorite)
+
+    const {
+        handleHelpClick,
+        handleFavoriteClick,
+        isDisabled, expired, completed
+    } = useHelpRequest(isFavorite, helpRequest?.endingDate ?? null, helpRequest?.requestGoal ?? null, helpRequest?.requestGoalCurrentValue ?? null)
 
     const isDisabledData = isLoadingHelpRequest || isLoadingFavoriteHelps
 
@@ -25,6 +30,7 @@ export const Help = () => {
     if (!helpRequest) {
         return <NotFoundResult img={"infoNotImage"} title={"Ошибка! Не удалось загрузить информацию"} color={"red"}/>
     }
+
 
     const isVerified = helpRequest.organization.isVerified;
     const icon = isVerified ? <VerifiedRounded sx={{color: "#1E88E5"}}/> : <ErrorOutline sx={{color: "#FF0000"}}/>;
@@ -104,8 +110,18 @@ export const Help = () => {
                     </Box>
 
                 </Box>
-                <FavoriteButton isFavorite={isFavorite} onClick={handleFavoriteClick(helpRequest.id)}
-                                disabled={isDisabled} titleButton/>
+                <Box display="flex" flexDirection="column" gap="20px" alignItems="flex-end">
+                    <FavoriteButton isFavorite={isFavorite} onClick={handleFavoriteClick(helpRequest.id)}
+                                    disabled={isDisabled} titleButton/>
+                    {completed &&
+                        <Box display="flex" gap="10px" alignItems="center" pr="5px">
+                            <AddTask sx={{color: "#4caf50"}}/>
+                            {expired ?
+                                <Typography variant="body2" color={"#4caf50"}>Запрос закрыт</Typography> :
+                                <Typography variant="body2" color={"#4caf50"}>Заявленные средства собраны</Typography>}
+                        </Box>
+                    }
+                </Box>
             </Paper>
             <Card sx={{
                 width: "320px",
@@ -128,7 +144,7 @@ export const Help = () => {
                                      requestGoalCurrentValue={helpRequest.requestGoalCurrentValue}
                                      contributorsCount={helpRequest.contributorsCount}
                                      onHelpClick={handleHelpClick(helpRequest.id)} marginBottom="40px"
-                                     disabled={isDisabled}/>
+                                     disabled={isDisabled || expired}/>
                 </CardContent>
             </Card>
         </Box>

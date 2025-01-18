@@ -49,6 +49,14 @@ export const Helps = () => {
             return matchesFilters && matchesDate;
         });
 
+        if (selectedDate) {
+            filtered.sort((a, b) => {
+                const dateA = dayjs(a.endingDate);
+                const dateB = dayjs(b.endingDate);
+                return dateA.isAfter(dateB) ? 1 : -1;
+            });
+        }
+
         if (searchTerm) {
             filtered = filtered.filter(item =>
                 item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||

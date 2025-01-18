@@ -42,7 +42,9 @@ export const CardRequest = ({
         isDisabled,
         handleHelpClick,
         handleNavigateRequestHelp,
-    } = useHelpRequest(isFavorite)
+        expired,
+        completed
+    } = useHelpRequest(isFavorite, dateClose, requestGoal, requestGoalCurrentValue)
 
     let cardImage;
     if (helpType === "finance" && requesterType === "person") {
@@ -57,6 +59,7 @@ export const CardRequest = ({
 
     return (
         <Card onClick={() => handleNavigateRequestHelp(id)} sx={{
+            backgroundColor: `${completed ? "#e8f6f0" : expired ? "#edf3fa" : ""}`,
             width: "320px",
             display: "flex",
             flexDirection: "column",
@@ -77,7 +80,8 @@ export const CardRequest = ({
                     <Typography variant={"h5"}>
                         {removeBrackets(titleCard)}
                     </Typography>
-                    <FavoriteButton isFavorite={isFavorite} onClick={handleFavoriteClick(id)} disabled={isDisabled}/>
+                    <FavoriteButton isFavorite={isFavorite} onClick={handleFavoriteClick(id)}
+                                    disabled={isDisabled}/>
                 </Box>
             </Box>
             <Box>
@@ -104,7 +108,7 @@ export const CardRequest = ({
                     <Typography variant="body2" mb="20px">{formatDate(dateClose)}</Typography>
                     <RequestProgress requestGoal={requestGoal} requestGoalCurrentValue={requestGoalCurrentValue}
                                      contributorsCount={contributorsCount} onHelpClick={handleHelpClick(id)}
-                                     disabled={isDisabled}/>
+                                     disabled={isDisabled || expired}/>
                 </CardContent>
             </Box>
         </Card>

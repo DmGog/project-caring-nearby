@@ -31,9 +31,17 @@ export const CardListItemRequest = ({
                                         isFavorite,
                                         id
                                     }: Props) => {
-    const {handleHelpClick, handleNavigateRequestHelp, handleFavoriteClick, isDisabled} = useHelpRequest(isFavorite)
+    const {
+        handleHelpClick,
+        handleNavigateRequestHelp,
+        handleFavoriteClick,
+        isDisabled,
+        expired,
+        completed
+    } = useHelpRequest(isFavorite, dateClose, requestGoal, requestGoalCurrentValue)
     return (
         <ListItem sx={{
+            backgroundColor: `${completed ? "#e8f6f0" : expired ? "#edf3fa" : ""}`,
             width: "1008px",
             padding: "20px",
             borderBottom: "1px solid #0000001F",
@@ -50,7 +58,7 @@ export const CardListItemRequest = ({
                     </Typography>
                     <RequestProgress requestGoal={requestGoal} requestGoalCurrentValue={requestGoalCurrentValue}
                                      contributorsCount={contributorsCount} onHelpClick={handleHelpClick(id)}
-                                     disabled={isDisabled}/>
+                                     disabled={isDisabled || expired}/>
                 </Stack>
                 <Stack gap="30px" sx={{width: "25%"}}>
                     <Box>

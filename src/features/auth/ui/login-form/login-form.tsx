@@ -79,7 +79,7 @@ export const LoginForm = () => {
                 <span className={s.titleCard}>Авторизация</span>
                 <span className={s.textEntrance}>Вход</span>
                 <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
-                    <TextField label={"Логин"} placeholder={"Введите e-mail"} type={"email"}
+                    <TextField required label={"Логин"} placeholder={"Введите e-mail"} type={"email"}
                                {...register("login", {
                                    required: "Введите корректный email-адрес",
                                    pattern: {
@@ -91,6 +91,7 @@ export const LoginForm = () => {
                     <FormControl sx={{mb: "40px"}}>
                         <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
                         <OutlinedInput
+                            required
                             {...register("password")}
                             placeholder={"Введите пароль"}
                             id="outlined-adornment-password"

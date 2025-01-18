@@ -1,6 +1,5 @@
-import {Box, Button, LinearProgress, ListItem, Stack, Typography} from "@mui/material";
-import {formatDate, formatNumber, removeBrackets} from "@/shared";
-import {Star, StarBorder} from "@mui/icons-material";
+import {Box, ListItem, Stack, Typography} from "@mui/material";
+import {FavoriteButton, formatDate, removeBrackets, RequestProgress} from "@/shared";
 import {useHelpRequest} from "@/features";
 
 
@@ -32,7 +31,7 @@ export const CardListItemRequest = ({
                                         isFavorite,
                                         id
                                     }: Props) => {
-    const {handleRemoveFavorite, handleAddFavorite, handleAddContribute, handleNavigateRequestHelp} = useHelpRequest()
+    const {handleHelpClick, handleNavigateRequestHelp, handleFavoriteClick, isDisabled} = useHelpRequest(isFavorite)
     return (
         <ListItem sx={{
             width: "1008px",
@@ -49,31 +48,10 @@ export const CardListItemRequest = ({
                     <Typography variant="h5" mb="30px">
                         {removeBrackets(titleCard)}
                     </Typography>
-                    <Box sx={{display: "flex", flexDirection: "column", width: "100%"}}>
-                        <Typography variant="subtitle2" mb="4px">
-                            Мы собрали
-                        </Typography>
-                        <LinearProgress sx={{
-                            mb: "4px"
-                        }} variant="determinate"
-                                        value={Math.min((requestGoalCurrentValue / requestGoal) * 100, 100)}/>
-                        <Box sx={{display: "flex", justifyContent: "space-between", mb: "20px"}}>
-                            <Typography variant="body2" color="textSecondary">
-                                {formatNumber(requestGoalCurrentValue)} руб
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                                {formatNumber(requestGoal)} руб
-                            </Typography>
-                        </Box>
-                        <Typography variant="body2" mb="10px" color="textSecondary">Нас
-                            уже: {formatNumber(contributorsCount)}</Typography>
-                        <Button onClick={(e) => {
-                            e.stopPropagation();
-                            handleAddContribute(id)
-                        }} variant="contained" fullWidth>Помочь</Button>
-                    </Box>
+                    <RequestProgress requestGoal={requestGoal} requestGoalCurrentValue={requestGoalCurrentValue}
+                                     contributorsCount={contributorsCount} onHelpClick={handleHelpClick(id)}
+                                     disabled={isDisabled}/>
                 </Stack>
-
                 <Stack gap="30px" sx={{width: "25%"}}>
                     <Box>
                         <Typography variant="subtitle2">
@@ -114,20 +92,8 @@ export const CardListItemRequest = ({
                         </Typography>
                     </Box>
                 </Stack>
-                <Button onClick={(e) => {
-                    e.stopPropagation();
-                    (isFavorite ? handleRemoveFavorite(id) : handleAddFavorite(id))
-                }} size="small"
-                        color="inherit"
-                        variant="outlined" startIcon={isFavorite ? <Star/> : <StarBorder/>}
-                        sx={{
-                            height: "28px",
-                            textTransform: "none",
-                            border: "1px solid rgba(0, 0, 0, 0.12)",
-                            padding: "4px 10px",
-                        }}>
-                    {isFavorite ? "Удалить из избранное" : "Добавить в избранное"}
-                </Button>
+                <FavoriteButton isFavorite={isFavorite} onClick={handleFavoriteClick(id)} disabled={isDisabled}
+                                titleButton/>
             </Stack>
         </ListItem>
     );

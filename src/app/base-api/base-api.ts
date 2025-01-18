@@ -26,7 +26,11 @@ export const baseApi = createApi({
             if (result.error.status === 403) {
                 toast.error("Вы не авторизованы")
             }
+            if (result.error.status === 400) {
+                toast.error("Не корректные данные")
+            }
         }
+
         return result
     },
     endpoints: () => ({}),

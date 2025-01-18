@@ -4,8 +4,6 @@ import {
     AccordionSummary,
     Box,
     Button,
-    Checkbox,
-    FormControlLabel,
     FormGroup,
     FormLabel,
     Typography
@@ -15,6 +13,11 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, {Dayjs} from "dayjs";
 import {useSearchParams} from "react-router-dom";
 import {useEffect} from "react";
+import {FilterGroup} from "@/shared";
+import {mainFilters, volunteerActivity} from "./data";
+import "dayjs/locale/ru";
+
+dayjs.locale("ru");
 
 type Props = {
     selectedFilters: string[];
@@ -22,6 +25,7 @@ type Props = {
     selectedDate: Dayjs | null;
     onDateChange: (date: Dayjs | null) => void;
 }
+
 
 export const FilterController = ({selectedFilters, onFilterChange, selectedDate, onDateChange}: Props) => {
 
@@ -77,88 +81,21 @@ export const FilterController = ({selectedFilters, onFilterChange, selectedDate,
             borderLeft: "1px solid rgba(0, 0, 0, 0.12)",
             borderRight: "1px solid rgba(0, 0, 0, 0.12)",
         }}>
-            <Typography variant={"h6"} mb={"25px"}>Фильтрация</Typography>
-            <FormGroup sx={{marginBottom: "20px"}}>
-                <FormLabel>Кому мы помогаем</FormLabel>
-                <FormControlLabel sx={{paddingLeft: "9px"}} control={<Checkbox color={"primary"} size={"medium"}/>}
-                                  label="Пенсионеры"
-                                  checked={selectedFilters.includes("person")}
-                                  onChange={() => handleChange("person")}/>
-                <FormControlLabel sx={{paddingLeft: "9px"}} control={<Checkbox color={"primary"} size={"medium"}/>}
-                                  label="Дома престарелых"
-                                  checked={selectedFilters.includes("organization")}
-                                  onChange={() => handleChange("organization")}
-                />
-            </FormGroup>
-            <FormGroup>
-                <FormLabel>Чем мы помогаем</FormLabel>
-                <FormControlLabel sx={{paddingLeft: "9px"}} control={<Checkbox color={"primary"} size={"medium"}/>}
-                                  label="Вещи"
-                                  checked={selectedFilters.includes("material")}
-                                  onChange={() => handleChange("material")}
-                />
-                <FormControlLabel sx={{paddingLeft: "9px"}} control={<Checkbox color={"primary"} size={"medium"}/>}
-                                  label="Финансирование"
-                                  checked={selectedFilters.includes("finance")}
-                                  onChange={() => handleChange("finance")}
-                />
-            </FormGroup>
+            <Typography variant="h6" mb="25px">Фильтрация</Typography>
+            <FilterGroup marginBottom="20px" filters={mainFilters} selectedFilters={selectedFilters}
+                         handleChange={handleChange}/>
             <Accordion sx={{marginBottom: "20px"}}>
                 <AccordionSummary
                     aria-controls="panel-content"
                     id="panel"
                 >
-                    <Typography variant={"body1"}>Волонтерство</Typography>
+                    <Typography variant="body1">Волонтерство</Typography>
                 </AccordionSummary>
                 <AccordionDetails sx={{
                     backgroundColor: "#f5f5f5"
                 }}>
-                    <FormGroup sx={{marginBottom: "16px"}}>
-                        <FormLabel>Специализация</FormLabel>
-                        <FormControlLabel sx={{paddingLeft: "9px"}}
-                                          control={<Checkbox color={"primary"} size={"medium"}/>}
-                                          label="Квалифицированная"
-                                          checked={selectedFilters.includes("professional")}
-                                          onChange={() => handleChange("professional")}
-
-                        />
-                        <FormControlLabel sx={{paddingLeft: "9px"}}
-                                          control={<Checkbox color={"primary"} size={"medium"}/>}
-                                          label="Не требует профессии"
-                                          checked={selectedFilters.includes("common")}
-                                          onChange={() => handleChange("common")}
-                        />
-                    </FormGroup>
-                    <FormGroup sx={{marginBottom: "16px"}}>
-                        <FormLabel>Формат</FormLabel>
-                        <FormControlLabel sx={{paddingLeft: "9px"}}
-                                          control={<Checkbox color={"primary"} size={"medium"}/>}
-                                          label="Онлайн"
-                                          checked={selectedFilters.includes("online")}
-                                          onChange={() => handleChange("online")}
-                        />
-                        <FormControlLabel sx={{paddingLeft: "9px"}}
-                                          control={<Checkbox color={"primary"} size={"medium"}/>}
-                                          label="Офлайн"
-                                          checked={selectedFilters.includes("offline")}
-                                          onChange={() => handleChange("offline")}
-                        />
-                    </FormGroup>
-                    <FormGroup>
-                        <FormLabel>Необходимо волонтеров</FormLabel>
-                        <FormControlLabel sx={{paddingLeft: "9px"}}
-                                          control={<Checkbox color={"primary"} size={"medium"}/>}
-                                          label="Группа"
-                                          checked={selectedFilters.includes("group")}
-                                          onChange={() => handleChange("group")}
-                        />
-                        <FormControlLabel sx={{paddingLeft: "9px"}}
-                                          control={<Checkbox color={"primary"} size={"medium"}/>}
-                                          label="Один"
-                                          checked={selectedFilters.includes("single")}
-                                          onChange={() => handleChange("single")}
-                        />
-                    </FormGroup>
+                    <FilterGroup marginBottom="16px" filters={volunteerActivity} selectedFilters={selectedFilters}
+                                 handleChange={handleChange}/>
                 </AccordionDetails>
             </Accordion>
             <FormGroup sx={{marginBottom: "40px"}}>
@@ -166,17 +103,16 @@ export const FilterController = ({selectedFilters, onFilterChange, selectedDate,
                     marginBottom: "10px"
                 }}>Помощь актуальна до:</FormLabel>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label={"Выберите дату"}
+                    <DatePicker label="Выберите дату"
                                 value={selectedDate}
                                 onChange={handleDateChange}
                     />
                 </LocalizationProvider>
             </FormGroup>
-            <Button disabled={selectedFilters.length < 1 && !selectedDate } onClick={handleResetFilters} size={"large"}
-                    color={"inherit"}
-                    variant={"outlined"}
+            <Button disabled={selectedFilters.length < 1 && !selectedDate} onClick={handleResetFilters} size="large"
+                    color="inherit"
+                    variant="outlined"
                     fullWidth>CБРОСИТЬ</Button>
         </Box>
     );
 };
-

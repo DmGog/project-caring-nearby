@@ -1,21 +1,36 @@
 import {useHelpRequest, useHelpRequestByIdQuery, useUserHelpFavoritesRequestsQuery} from "@/features";
-import {Box, Button, Card, CardContent, LinearProgress, List, ListItem, Paper, Typography} from "@mui/material";
-import {CheckCircleOutlined, ErrorOutline, VerifiedRounded, StarBorder, Star} from "@mui/icons-material";
-import {formatDate, formatNumber, InfoRow, NotFoundResult, removeBrackets} from "@/shared";
+import {Box, Card, CardContent, List, ListItem, Paper, Typography} from "@mui/material";
+import {CheckCircleOutlined, ErrorOutline, VerifiedRounded} from "@mui/icons-material";
+import {FavoriteButton, formatDate, InfoRow, NotFoundResult, removeBrackets, RequestProgress} from "@/shared";
 import {useParams} from "react-router";
+import {HelpPageSkeleton} from "../help-page-skeleton";
 
 export const Help = () => {
     const {id} = useParams()
-    const {data: helpRequest} = useHelpRequestByIdQuery(id ?? "");
-    const {data: userFavoriteHelps} = useUserHelpFavoritesRequestsQuery();
-    const {handleAddContribute, handleAddFavorite, handleRemoveFavorite} = useHelpRequest()
-    if ( !helpRequest) {
-        return <NotFoundResult img={"infoNotImage"} title={"Ошибка! Не удалось загрузить информацию"} color={"red"}/>
-    }
+    const {data: helpRequest, isLoading: isLoadingHelpRequest} = useHelpRequestByIdQuery(id ?? "");
+    const {data: userFavoriteHelps, isLoading: isLoadingFavoriteHelps} = useUserHelpFavoritesRequestsQuery();
+
     let isFavorite = false
     if (userFavoriteHelps && id) {
         isFavorite = userFavoriteHelps.includes(id)
     }
+    const {handleHelpClick, handleFavoriteClick, isDisabled} = useHelpRequest(isFavorite)
+
+    const isDisabledData = isLoadingHelpRequest || isLoadingFavoriteHelps
+
+    if (isDisabledData) {
+        return <HelpPageSkeleton/>
+    }
+
+    if (!helpRequest) {
+        return <NotFoundResult img={"infoNotImage"} title={"Ошибка! Не удалось загрузить информацию"} color={"red"}/>
+    }
+
+    const isVerified = helpRequest.organization.isVerified;
+    const icon = isVerified ? <VerifiedRounded sx={{color: "#1E88E5"}}/> : <ErrorOutline sx={{color: "#FF0000"}}/>;
+    const text = isVerified ? "Организация проверена" : "Организация не проверена";
+    const textColor = isVerified ? "inherit" : "red";
+
     return (
         <Box display="flex" alignItems="flex-start" justifyContent="space-between">
             <Paper variant="outlined" elevation={0} sx={{
@@ -34,21 +49,10 @@ export const Help = () => {
                     <Typography variant="h6" mb="10px">Организация</Typography>
                     <Typography variant="body2" mb="4px">{helpRequest.organization.title}</Typography>
                     <Box display="flex" justifyContent="flex-start" alignItems="end" gap="4px" mb="30px">
-                        {helpRequest.organization.isVerified ?
-                            (
-                                <>
-                                    <VerifiedRounded sx={{color: "#1E88E5",}}/>
-                                    <Typography variant="caption">Организация проверена</Typography>
-                                </>
-                            )
-                            :
-                            (
-                                <>
-                                    <ErrorOutline sx={{color: "red"}}/>
-                                    <Typography variant="caption" color="red">Организация не проверена</Typography>
-                                </>
-                            )
-                        }
+                        {icon}
+                        <Typography variant="caption" color={textColor}>
+                            {text}
+                        </Typography>
                     </Box>
                     <Typography variant="h6" mb="10px">Кому мы помогаем</Typography>
                     <Typography variant="body2" mb="30px">
@@ -81,8 +85,8 @@ export const Help = () => {
                     <Typography variant="h6" mb="10px">Завершение</Typography>
                     <Typography variant="body2" mb="30px">{formatDate(helpRequest.endingDate)}</Typography>
                     <Typography variant="h6" mb="10px">Локация</Typography>
-                    <InfoRow label={"Область"} value={helpRequest.location.district}/>
-                    <InfoRow label={"Населенный пункт"} value={helpRequest.location.city}/>
+                    <InfoRow label="Область" value={helpRequest.location.district}/>
+                    <InfoRow label="Населенный пункт" value={helpRequest.location.city}/>
                     <Typography variant="h6" mt="30px" mb="10px">Контакты</Typography>
                     <Box display="flex" width="100%" alignItems="center" justifyContent="space-between">
                         <Box>
@@ -100,20 +104,8 @@ export const Help = () => {
                     </Box>
 
                 </Box>
-                <Button onClick={(e) => {
-                    e.stopPropagation();
-                    (isFavorite ? handleRemoveFavorite(helpRequest.id) : handleAddFavorite(helpRequest.id))
-                }} size="small"
-                        color="inherit"
-                        variant="outlined" startIcon={isFavorite ? <Star/> : <StarBorder/>}
-                        sx={{
-                            height: "28px",
-                            textTransform: "none",
-                            border: "1px solid rgba(0, 0, 0, 0.12)",
-                            padding: "4px 10px",
-                        }}>
-                    {isFavorite ? "Удалить из избранное" : "Добавить в избранное"}
-                </Button>
+                <FavoriteButton isFavorite={isFavorite} onClick={handleFavoriteClick(helpRequest.id)}
+                                disabled={isDisabled} titleButton/>
             </Paper>
             <Card sx={{
                 width: "320px",
@@ -132,27 +124,11 @@ export const Help = () => {
                     </Typography>
                     <Typography variant="subtitle2" mb="4px">Завершение</Typography>
                     <Typography variant="body2" mb="20px">{formatDate(helpRequest.endingDate)}</Typography>
-                    <Box sx={{display: "flex", flexDirection: "column", width: "100%"}}>
-                        <Typography variant="subtitle2" mb="4px">
-                            Мы собрали
-                        </Typography>
-                        <LinearProgress sx={{
-                            mb: "4px"
-                        }} variant="determinate"
-                                        value={Math.min((helpRequest.requestGoalCurrentValue / helpRequest.requestGoal) * 100, 100)}/>
-                        <Box sx={{display: "flex", justifyContent: "space-between", mb: "40px"}}>
-                            <Typography variant="body2" color="textSecondary">
-                                {formatNumber(helpRequest.requestGoalCurrentValue)} руб
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                                {formatNumber(helpRequest.requestGoal)} руб
-                            </Typography>
-                        </Box>
-                        <Typography variant="body2" mb="10px" color="textSecondary">Нас
-                            уже: {formatNumber(helpRequest.contributorsCount)}</Typography>
-                        <Button variant="contained" fullWidth
-                                onClick={() => handleAddContribute(helpRequest.id)}>Помочь</Button>
-                    </Box>
+                    <RequestProgress requestGoal={helpRequest.requestGoal}
+                                     requestGoalCurrentValue={helpRequest.requestGoalCurrentValue}
+                                     contributorsCount={helpRequest.contributorsCount}
+                                     onHelpClick={handleHelpClick(helpRequest.id)} marginBottom="40px"
+                                     disabled={isDisabled}/>
                 </CardContent>
             </Card>
         </Box>

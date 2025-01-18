@@ -1,14 +1,12 @@
 import LogoIcon from "@/shared/assets/icons/Logo.svg"
 import {Link} from "react-router-dom";
 import {PATH} from "@/app/router";
-import {AppBar, Box, Button, Toolbar} from "@mui/material";
+import {AppBar, Box, Button, styled, Toolbar} from "@mui/material";
 import {ChevronRight} from "@mui/icons-material";
 import {PopoverProfile, useLogout} from "@/shared";
 import {MouseEvent, useState} from "react";
 import {useNavigate} from "react-router";
 import AvatarIcon from "@/shared/assets/icons/avatar.svg"
-import s from "./header.module.scss"
-
 
 export const Header = () => {
     const isAuth = localStorage.getItem("auth")
@@ -44,13 +42,13 @@ export const Header = () => {
                 maxWidth: "1548px",
                 justifyContent: "space-between"
             }}>
-                <Link to={PATH.HELPS_PAGE}>
+                <Link to={isAuth ? PATH.HELPS_PAGE : "#"} onClick={(e) => !isAuth && e.preventDefault()}>
                     <LogoIcon/>
                 </Link>
                 <Box display="flex" width="100%" maxWidth="824px" alignItems="center" justifyContent="space-between">
-                    <Link to={PATH.HELPS_PAGE} className={s.link}>
+                    <StyledLink to={isAuth ? PATH.HELPS_PAGE : "#"} onClick={(e) => !isAuth && e.preventDefault()}>
                         Запросы о помощи
-                    </Link>
+                    </StyledLink>
                     {!isAuth ? (
                         <Button size={"large"} color={"inherit"} variant={"outlined"} sx={{
                             display: "flex", justifyContent: "center", gap: "8px",
@@ -79,3 +77,12 @@ export const Header = () => {
     )
 }
 
+const StyledLink = styled(Link)`
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+        color: #1976d2;
+    }
+`;

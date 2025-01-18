@@ -7,7 +7,7 @@ type Props = {
 }
 export const CardsListItemRequest = ({data, favoriteHelps}: Props) => {
     return (
-        <List>
+        <List  sx={{ display:"flex", flexDirection:"column", gap:"10px"}}>
             {data.map(c => (
                 <CardListItemRequest key={c.id} id={c.id} isFavorite={favoriteHelps.includes(c.id)}
                                      requestGoal={c.requestGoal} descriptionHelpRequest={c.description}

@@ -8,8 +8,9 @@ import {useNavigate} from "react-router";
 import {PATH} from "@/app/router";
 import {isFetchBaseQueryError} from "@/shared";
 import {MouseEvent, useState} from "react";
+import dayjs from "dayjs";
 
-export const useHelpRequest = (isFavorite: boolean) => {
+export const useHelpRequest = (isFavorite: boolean, dateClose: string | null, requestGoal: number | null, requestGoalCurrentValue: number | null) => {
     const [addFavorite] = useAddHelpRequestFavouritesMutation();
     const [removeFavorite] = useRemoveHelpRequestFavouritesMutation();
     const [addContribute] = useContributeMutation()
@@ -63,10 +64,17 @@ export const useHelpRequest = (isFavorite: boolean) => {
         e.stopPropagation();
         (isFavorite ? handleFavoriteAction(id, "remove") : handleFavoriteAction(id, "add"))
     }
+    const isExpired = (date: string): boolean => {
+        return dayjs(date).isBefore(dayjs(), "day");
+    };
+    const expired = isExpired(dateClose || "")
+    const completed = (requestGoal || 0) < (requestGoalCurrentValue || 0)
 
     const isDisabled = isDisabledFavorite || isDisabledContribute
     return {
         isDisabled,
+        expired,
+        completed,
         handleHelpClick,
         handleNavigateRequestHelp,
         handleFavoriteClick

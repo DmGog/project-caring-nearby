@@ -1,6 +1,6 @@
 import {Container, Typography} from "@mui/material";
-import NotFoundResultImage from "@/shared/assets/images/not-found-result.png"
-import NotFoundInfo from "@/shared/assets/images/not-found.png"
+import NotFoundResultImage from "@/shared/assets/images/not-found-result.webp"
+import NotFoundInfo from "@/shared/assets/images/not-found.webp"
 
 type Title = "Ошибка! Не удалось загрузить информацию" | "Запросы не найдены" | "Ошибка! Не удалось загрузить запросы"
 

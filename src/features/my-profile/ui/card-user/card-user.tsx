@@ -1,5 +1,5 @@
 import {Box, Button, CardContent, CardMedia, Typography} from "@mui/material";
-import ProfileDefaultImage from "@/shared/assets/images/profile-default.png";
+import ProfileDefaultImage from "@/shared/assets/images/profile-default.webp";
 import {InfoRow, useLogout} from "@/shared";
 
 type Props = {

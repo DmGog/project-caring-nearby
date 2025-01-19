@@ -1,4 +1,4 @@
-import ErrorImage from "@/shared/assets/images/not-found.png"
+import ErrorImage from "@/shared/assets/images/not-found.webp"
 import {Box, Typography} from "@mui/material";
 
 export const NotFoundPage = () => {

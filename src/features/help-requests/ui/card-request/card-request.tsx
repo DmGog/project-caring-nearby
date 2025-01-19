@@ -1,7 +1,7 @@
 import {Box, Card, CardContent, CardMedia, Divider, Typography} from "@mui/material";
-import CardFinanceImage from "@/shared/assets/images/card-finance.png";
-import CardMaterialImage from "@/shared/assets/images/card-material.png";
-import CardOrganizationImage from "@/shared/assets/images/card-organization.png";
+import CardFinanceImage from "@/shared/assets/images/card-finance.webp";
+import CardMaterialImage from "@/shared/assets/images/card-material.webp";
+import CardOrganizationImage from "@/shared/assets/images/card-organization.webp";
 import {FavoriteButton, formatDate, removeBrackets, RequestProgress} from "@/shared";
 import {useHelpRequest} from "@/features";
 

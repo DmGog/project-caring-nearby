@@ -2,6 +2,7 @@ import {CardMap, HelpRequest, HelpRequests, useHelpRequestsQuery, useUserHelpFav
 import {NotFoundResult, ToggleButtonsGroup, usePaginationAndAlignment} from "@/shared";
 import {CardsListItemRequest, CardsRequest} from "@/widgets";
 import {Box, Pagination, Skeleton} from "@mui/material";
+import {toast} from "react-toastify";
 
 
 export const Favorites = () => {
@@ -26,6 +27,10 @@ export const Favorites = () => {
 
     if (isDisabled) {
         return <Skeleton variant="rounded" width="1008px" height="853px" sx={{pt: "20px"}}/>
+    }
+
+    if (!favoritesHelps) {
+        toast.error("Попробуйте обновить страницу")
     }
     return (
         <Box

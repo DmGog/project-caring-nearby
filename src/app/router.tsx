@@ -1,10 +1,11 @@
 import {Route, Routes} from "react-router";
-import {Helps, LoginPage, NotFoundPage, Profile, Request} from "@/pages";
+import {Helps, HomePage, LoginPage, NotFoundPage, Profile, Request} from "@/pages";
 import {Contacts, Favorites, PersonalData, ProtectedRoute} from "@/features";
 
 export const PATH = {
+    HOME_PAGE: "/",
     LOGIN_PAGE: "/login",
-    NOT_FOUND_PAGE: "/*",
+    NOT_FOUND_PAGE: "*",
     PROFILE: {
         PROFILE_PAGE: "/profile",
         PROFILE_PAGE_PERSONAL_DATA: "/profile/data",
@@ -18,6 +19,7 @@ export const PATH = {
 export const Routing = () => {
     return (
         <Routes>
+            <Route path={PATH.HOME_PAGE} element={<HomePage />} />
             <Route path={PATH.LOGIN_PAGE} element={<LoginPage/>}/>
             <Route element={<ProtectedRoute/>}>
                 <Route path={PATH.PROFILE.PROFILE_PAGE} element={<Profile/>}>

@@ -13,7 +13,7 @@ export type Education = {
 };
 
 
-export type Contacts = {
+export type ContactsType = {
     email: string;
     phone: string;
     social: {
@@ -33,6 +33,6 @@ export type UserType = {
     baseLocations: BaseLocation[];
     educations: Education[];
     additionalInfo: string;
-    contacts: Contacts;
+    contacts: ContactsType;
     favouriteRequests: string[];
 };

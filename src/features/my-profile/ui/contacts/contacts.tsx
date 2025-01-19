@@ -1,9 +1,9 @@
 import {Box, List, ListItem, Typography} from "@mui/material";
-import {UserType} from "@/features";
 import VkIcon from "@/shared/assets/icons/vk.svg"
 import TelegramIcon from "@/shared/assets/icons/telegram.svg"
 import WhatsappIcon from "@/shared/assets/icons/whatsapp.svg"
 import {useOutletContext} from "react-router";
+import {UserType} from "@/features";
 
 const socialNetworks = [
     {key: "vk", label: "VK", icon: VkIcon},

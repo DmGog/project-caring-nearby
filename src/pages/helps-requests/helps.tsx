@@ -1,6 +1,6 @@
 import {Box, Pagination, Paper, Typography} from "@mui/material";
 import {CardsListItemRequest, CardsRequest, FilterController} from "@/widgets";
-import {CardMap, HelpsPageSkeleton, useHelpRequestsQuery, useUserHelpFavoritesRequestsQuery} from "@/features";
+import {HelpsPageSkeleton, useHelpRequestsQuery, useUserHelpFavoritesRequestsQuery} from "@/features";
 import {NotFoundResult, SearchInput, ToggleButtonsGroup, usePaginationAndAlignment} from "@/shared";
 import {useEffect, useState} from "react";
 import {useSearchParams} from "react-router-dom";
@@ -131,19 +131,16 @@ export const Helps = () => {
                                         <NotFoundResult img={"resultNotImage"} title={"Запросы не найдены"}/>}
                                     {alignment === "left" &&
                                         <CardsRequest data={currentItems} favoriteHelps={favoritesHelps ?? []}/>}
-                                    {alignment === "center" &&
+                                    {alignment === "right" &&
                                         <CardsListItemRequest data={currentItems}
                                                               favoriteHelps={favoritesHelps ?? []}/>}
-                                    {alignment === "right" && <CardMap/>}
-                                    {alignment !== "right" && (
-                                        <Pagination
-                                            sx={{mt: "30px"}}
-                                            count={totalPages}
-                                            page={currentPage}
-                                            onChange={(_, value) => setCurrentPage(value)}
-                                            color="primary"
-                                        />
-                                    )}
+                                    <Pagination
+                                        sx={{mt: "30px"}}
+                                        count={totalPages}
+                                        page={currentPage}
+                                        onChange={(_, value) => setCurrentPage(value)}
+                                        color="primary"
+                                    />
                                 </Box>)}
                         </Paper>
                     </Box>

@@ -1,8 +1,7 @@
-import {CardMap, HelpRequest, HelpRequests, useHelpRequestsQuery, useUserHelpFavoritesRequestsQuery,} from "@/features";
+import {HelpRequest, HelpRequests, useHelpRequestsQuery, useUserHelpFavoritesRequestsQuery,} from "@/features";
 import {NotFoundResult, ToggleButtonsGroup, usePaginationAndAlignment} from "@/shared";
 import {CardsListItemRequest, CardsRequest} from "@/widgets";
 import {Box, Pagination, Skeleton} from "@mui/material";
-import {toast} from "react-toastify";
 
 
 export const Favorites = () => {
@@ -29,9 +28,6 @@ export const Favorites = () => {
         return <Skeleton variant="rounded" width="1008px" height="853px" sx={{pt: "20px"}}/>
     }
 
-    if (!favoritesHelps) {
-        toast.error("Попробуйте обновить страницу")
-    }
     return (
         <Box
             sx={{
@@ -50,8 +46,7 @@ export const Favorites = () => {
                 <NotFoundResult title="Ошибка! Не удалось загрузить запросы" img="infoNotImage" color="red"/>}
             {favoriteRequests.length < 1 && <NotFoundResult title="Запросы не найдены" img="resultNotImage"/>}
             {alignment === "left" && <CardsRequest data={currentItems} favoriteHelps={favoritesHelps ?? []}/>}
-            {alignment === "center" && <CardsListItemRequest data={currentItems} favoriteHelps={favoritesHelps ?? []}/>}
-            {alignment === "right" && <CardMap/>}
+            {alignment === "right" && <CardsListItemRequest data={currentItems} favoriteHelps={favoritesHelps ?? []}/>}
             {favoriteRequests.length >= 1 &&
                 <Pagination
                     disabled={isDisabled}

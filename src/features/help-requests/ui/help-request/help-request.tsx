@@ -4,7 +4,6 @@ import {AddTask, CheckCircleOutlined, ErrorOutline, VerifiedRounded} from "@mui/
 import {FavoriteButton, formatDate, InfoRow, NotFoundResult, removeBrackets, RequestProgress} from "@/shared";
 import {useParams} from "react-router";
 import {HelpPageSkeleton} from "../help-page-skeleton";
-import {toast} from "react-toastify";
 
 export const Help = () => {
     const {id} = useParams()
@@ -29,7 +28,6 @@ export const Help = () => {
     }
 
     if (!helpRequest) {
-        toast.error("Попробуйте обновить страницу")
         return <NotFoundResult img={"infoNotImage"} title={"Ошибка! Не удалось загрузить информацию"} color={"red"}/>
     }
 

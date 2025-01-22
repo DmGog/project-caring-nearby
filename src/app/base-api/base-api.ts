@@ -24,6 +24,7 @@ export const baseApi = createApi({
                 toast.error("Нет подключения к интернету")
             }
             if (result.error.status === 403) {
+                localStorage.clear()
                 toast.error("Вы не авторизованы")
             }
             if (result.error.status === 400) {
